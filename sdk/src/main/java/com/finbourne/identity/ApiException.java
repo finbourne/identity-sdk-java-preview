@@ -99,7 +99,7 @@ public class ApiException extends Exception {
             return String.format("Response body = %s\n%s", responseBody, super.getMessage());
         }
         
-        List<String> ids = responseHeaders.get("identity-meta-requestid");
+        List<String> ids = responseHeaders.get("lydia-meta-requestid");
         String requestId = ids == null ? "" : ids.stream().findFirst().get();
 
         return String.format("LUSID requestId = %s\nResponse body = %s\n%s", requestId, responseBody, super.getMessage());
