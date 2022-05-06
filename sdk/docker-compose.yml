@@ -2,9 +2,9 @@ version: "3"
 
 services:
 
-  lusid-sdk-java-preview-test:
+  identity-sdk-java-preview-test:
     build: .
-    container_name: identity-sdk-extensions-java-test
+    container_name: identity-sdk-java-preview-test
     image: maven:3.8.5-jdk-11
     environment:
       - FBN_TOKEN_URL
