@@ -32,6 +32,7 @@ import com.finbourne.identity.model.CreateDomainRequest;
 import com.finbourne.identity.model.DomainResponse;
 import com.finbourne.identity.model.LusidProblemDetails;
 import com.finbourne.identity.model.LusidValidationProblemDetails;
+import com.finbourne.identity.model.ProblemDetails;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

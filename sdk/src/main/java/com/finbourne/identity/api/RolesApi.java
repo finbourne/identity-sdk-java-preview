@@ -30,6 +30,7 @@ import java.io.IOException;
 import com.finbourne.identity.model.CreateRoleRequest;
 import com.finbourne.identity.model.LusidProblemDetails;
 import com.finbourne.identity.model.LusidValidationProblemDetails;
+import com.finbourne.identity.model.ProblemDetails;
 import com.finbourne.identity.model.RoleResponse;
 import com.finbourne.identity.model.UpdateRoleRequest;
 import com.finbourne.identity.model.UserResponse;

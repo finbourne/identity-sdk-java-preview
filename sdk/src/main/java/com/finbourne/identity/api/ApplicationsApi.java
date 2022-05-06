@@ -31,6 +31,7 @@ import com.finbourne.identity.model.CreateApplicationRequest;
 import com.finbourne.identity.model.LusidProblemDetails;
 import com.finbourne.identity.model.LusidValidationProblemDetails;
 import com.finbourne.identity.model.OAuthApplication;
+import com.finbourne.identity.model.ProblemDetails;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
