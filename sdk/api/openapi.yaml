@@ -6,7 +6,7 @@ info:
     url: https://www.finbourne.com
   termsOfService: https://www.finbourne.com/legal/terms-conditions
   title: FINBOURNE Identity Service API
-  version: 0.0.1598
+  version: 0.0.1626
   x-logo:
     url: https://www.lusid.com/app/assets/logo_white.png
     backgroundColor: '#415464'
@@ -217,10 +217,6 @@ paths:
                 $ref: '#/components/schemas/OAuthApplication'
           description: Get the specified application
         "404":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
           description: Not Found
         "400":
           content:
@@ -798,42 +794,42 @@ paths:
           content:
             text/plain:
               example:
-                termsAndConditions-20190101-GBP:
-                  name: TermsAndConditions-20190101-GB
-                  signedBy: DomainOwnerUserId
-                  signedAt: 2019-01-05T10:15:00.0000000+00:00
                 termsAndConditions-20190301-GBP:
                   name: TermsAndConditions-20190301-GB
                   signedBy: DomainOwnerUserId
                   signedAt: 2019-03-07T13:23:07.0000000+00:00
+                termsAndConditions-20190101-GBP:
+                  name: TermsAndConditions-20190101-GB
+                  signedBy: DomainOwnerUserId
+                  signedAt: 2019-01-05T10:15:00.0000000+00:00
               schema:
                 additionalProperties:
                   $ref: '#/components/schemas/AgreementResponse'
                 type: object
             application/json:
               example:
-                termsAndConditions-20190101-GBP:
-                  name: TermsAndConditions-20190101-GB
-                  signedBy: DomainOwnerUserId
-                  signedAt: 2019-01-05T10:15:00.0000000+00:00
                 termsAndConditions-20190301-GBP:
                   name: TermsAndConditions-20190301-GB
                   signedBy: DomainOwnerUserId
                   signedAt: 2019-03-07T13:23:07.0000000+00:00
+                termsAndConditions-20190101-GBP:
+                  name: TermsAndConditions-20190101-GB
+                  signedBy: DomainOwnerUserId
+                  signedAt: 2019-01-05T10:15:00.0000000+00:00
               schema:
                 additionalProperties:
                   $ref: '#/components/schemas/AgreementResponse'
                 type: object
             text/json:
               example:
-                termsAndConditions-20190101-GBP:
-                  name: TermsAndConditions-20190101-GB
-                  signedBy: DomainOwnerUserId
-                  signedAt: 2019-01-05T10:15:00.0000000+00:00
                 termsAndConditions-20190301-GBP:
                   name: TermsAndConditions-20190301-GB
                   signedBy: DomainOwnerUserId
                   signedAt: 2019-03-07T13:23:07.0000000+00:00
+                termsAndConditions-20190101-GBP:
+                  name: TermsAndConditions-20190101-GB
+                  signedBy: DomainOwnerUserId
+                  signedAt: 2019-01-05T10:15:00.0000000+00:00
               schema:
                 additionalProperties:
                   $ref: '#/components/schemas/AgreementResponse'
@@ -870,16 +866,6 @@ paths:
         style: simple
       responses:
         "404":
-          content:
-            text/plain:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
           description: Not Found
         "200":
           content:
@@ -1167,6 +1153,66 @@ paths:
       - Me
       x-fbn-apistatus: EarlyAccess
       x-accepts: application/json
+  /api/me/password:
+    put:
+      description: "Set the password of the current user to the specified value.\r\
+        \n            \r\nNote this is feature is only available to Service users\
+        \ authenticated using OpenID. For further information\r\nrelating to usage\
+        \ of this feature please consult the documentation."
+      operationId: SetPassword
+      requestBody:
+        content:
+          application/json-patch+json:
+            example:
+              value: ""
+            schema:
+              $ref: '#/components/schemas/SetPassword'
+          application/json:
+            example:
+              value: ""
+            schema:
+              $ref: '#/components/schemas/SetPassword'
+          text/json:
+            example:
+              value: ""
+            schema:
+              $ref: '#/components/schemas/SetPassword'
+          application/*+json:
+            example:
+              value: ""
+            schema:
+              $ref: '#/components/schemas/SetPassword'
+        description: The request containing the new password value
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                updatedAt: 2022-12-25T12:00:00.0000000+00:00
+              schema:
+                $ref: '#/components/schemas/SetPasswordResponse'
+          description: Set the current user's password
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LusidValidationProblemDetails'
+          description: The details of the input related failure
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LusidProblemDetails'
+          description: Error response
+      security:
+      - oauth2: []
+      summary: '[EXPERIMENTAL] SetPassword: Set password of current user'
+      tags:
+      - Me
+      x-fbn-apistatus: Experimental
+      x-contentType: application/json-patch+json
+      x-accepts: application/json
   /api/metadata/access/resources:
     get:
       description: Get the comprehensive set of resources that are available for access
@@ -1310,10 +1356,6 @@ paths:
                 $ref: '#/components/schemas/RoleResponse'
           description: Create a new role
         "409":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
           description: A role with the same Name already exists.
         "400":
           content:
@@ -1406,10 +1448,6 @@ paths:
                 $ref: '#/components/schemas/RoleResponse'
           description: Get the specified role
         "404":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
           description: Not Found
         "400":
           content:
@@ -1485,10 +1523,6 @@ paths:
                 $ref: '#/components/schemas/RoleResponse'
           description: Update a role
         "404":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
           description: Not Found
         "400":
           content:
@@ -1605,10 +1639,6 @@ paths:
         "204":
           description: Success
         "404":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
           description: Not Found
         "400":
           content:
@@ -1661,10 +1691,6 @@ paths:
         "204":
           description: Success
         "404":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
           description: Not Found
         "400":
           content:
@@ -3308,33 +3334,6 @@ components:
       - issuer
       - type
       type: object
-    ProblemDetails:
-      additionalProperties: false
-      properties:
-        type:
-          nullable: true
-          type: string
-        title:
-          nullable: true
-          type: string
-        status:
-          format: int32
-          nullable: true
-          type: integer
-        detail:
-          nullable: true
-          type: string
-        instance:
-          nullable: true
-          type: string
-        extensions:
-          additionalProperties:
-            additionalProperties: false
-            type: object
-          nullable: true
-          readOnly: true
-          type: object
-      type: object
     ResourceListOfAccessControlledResource:
       additionalProperties: false
       example:
@@ -3655,6 +3654,47 @@ components:
       - name
       - roleId
       - source
+      type: object
+    SetPassword:
+      additionalProperties: false
+      description: Set password request
+      example:
+        value: value
+      properties:
+        value:
+          description: The value of the new password
+          maxLength: 50
+          minLength: 12
+          type: string
+      required:
+      - value
+      type: object
+    SetPasswordResponse:
+      additionalProperties: false
+      description: The result of setting a password
+      example:
+        links:
+        - method: method
+          description: description
+          href: https://openapi-generator.tech
+          relation: relation
+        - method: method
+          description: description
+          href: https://openapi-generator.tech
+          relation: relation
+        updatedAt: 2000-01-23T04:56:07.000+00:00
+      properties:
+        updatedAt:
+          description: The date and time at which the password was successfully updated
+          format: date-time
+          type: string
+        links:
+          items:
+            $ref: '#/components/schemas/Link'
+          nullable: true
+          type: array
+      required:
+      - updatedAt
       type: object
     SupportAccessExpiry:
       additionalProperties: false

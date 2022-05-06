@@ -15,6 +15,7 @@ package com.finbourne.identity.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import com.finbourne.identity.model.Link;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
@@ -23,79 +24,69 @@ import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * ActionId
+ * The result of setting a password
  */
+@ApiModel(description = "The result of setting a password")
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class ActionId {
-  public static final String SERIALIZED_NAME_SCOPE = "scope";
-  @SerializedName(SERIALIZED_NAME_SCOPE)
-  private String scope;
+public class SetPasswordResponse {
+  public static final String SERIALIZED_NAME_UPDATED_AT = "updatedAt";
+  @SerializedName(SERIALIZED_NAME_UPDATED_AT)
+  private OffsetDateTime updatedAt;
 
-  public static final String SERIALIZED_NAME_ACTIVITY = "activity";
-  @SerializedName(SERIALIZED_NAME_ACTIVITY)
-  private String activity;
-
-  public static final String SERIALIZED_NAME_ENTITY = "entity";
-  @SerializedName(SERIALIZED_NAME_ENTITY)
-  private String entity;
+  public static final String SERIALIZED_NAME_LINKS = "links";
+  @SerializedName(SERIALIZED_NAME_LINKS)
+  private List<Link> links = null;
 
 
-  public ActionId scope(String scope) {
-    this.scope = scope; 
+  public SetPasswordResponse updatedAt(OffsetDateTime updatedAt) {
+    this.updatedAt = updatedAt; 
     return this;
   }
 
    /**
-   * Get scope
-   * @return scope
+   * The date and time at which the password was successfully updated
+   * @return updatedAt
   **/
-  @ApiModelProperty(required = true, value = "")
-  public String getScope() {
-    return scope;
+  @ApiModelProperty(required = true, value = "The date and time at which the password was successfully updated")
+  public OffsetDateTime getUpdatedAt() {
+    return updatedAt;
   }
 
-  public void setScope(String scope) {
-    this.scope = scope;
+  public void setUpdatedAt(OffsetDateTime updatedAt) {
+    this.updatedAt = updatedAt;
   }
 
 
-  public ActionId activity(String activity) {
-    this.activity = activity; 
+  public SetPasswordResponse links(List<Link> links) {
+    this.links = links; 
+    return this;
+  }
+
+  public SetPasswordResponse addLinksItem(Link linksItem) {
+   
+    if (this.links == null) {
+      this.links = new ArrayList<>();
+    }
+    this.links.add(linksItem);
     return this;
   }
 
    /**
-   * Get activity
-   * @return activity
+   * Get links
+   * @return links
   **/
-  @ApiModelProperty(required = true, value = "")
-  public String getActivity() {
-    return activity;
+  @ApiModelProperty(value = "")
+  public List<Link> getLinks() {
+    return links;
   }
 
-  public void setActivity(String activity) {
-    this.activity = activity;
-  }
-
-
-  public ActionId entity(String entity) {
-    this.entity = entity; 
-    return this;
-  }
-
-   /**
-   * Get entity
-   * @return entity
-  **/
-  @ApiModelProperty(required = true, value = "")
-  public String getEntity() {
-    return entity;
-  }
-
-  public void setEntity(String entity) {
-    this.entity = entity;
+  public void setLinks(List<Link> links) {
+    this.links = links;
   }
 
 
@@ -118,10 +109,9 @@ public class ActionId {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ActionId {\n");
-    sb.append("    scope: ").append(toIndentedString(scope)).append("\n");
-    sb.append("    activity: ").append(toIndentedString(activity)).append("\n");
-    sb.append("    entity: ").append(toIndentedString(entity)).append("\n");
+    sb.append("class SetPasswordResponse {\n");
+    sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
+    sb.append("    links: ").append(toIndentedString(links)).append("\n");
     sb.append("}");
     return sb.toString();
   }

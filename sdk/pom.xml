@@ -5,19 +5,19 @@
     <artifactId>identity-sdk-preview</artifactId>
     <packaging>jar</packaging>
     <name>identity-sdk-preview</name>
-    <version>0.0.1598-SNAPSHOT</version>
-    <url>https://github.com/finbourne/identity-sdk-java-preview</url>
-    <description>OpenAPI Java</description>
+    <version>0.0.1626-SNAPSHOT</version>
+    <url>https://github.com/finbourne/identity-sdk-java-preview/</url>
+    <description>Identity SDK Java Preview</description>
     <scm>
         <connection>git@github.com:finbourne/identity-sdk-java-preview.git</connection>
         <developerConnection>git@github.com:finbourne/identity-sdk-java-preview.git</developerConnection>
-        <url>https://github.com/finbourne/identity-sdk-java-preview</url>
+        <url>https://github.com/finbourne/identity-sdk-java-preview/</url>
     </scm>
 
     <licenses>
         <license>
             <name>MIT</name>
-            <url>https://github.com/finbourne/identity-sdk-java-preview/blob/master/LICENSE</url>
+            <url>https://github.com/finbourne/identity-sdk-java-preview/blob/master/LICENSE.md</url>
             <distribution>repo</distribution>
         </license>
     </licenses>

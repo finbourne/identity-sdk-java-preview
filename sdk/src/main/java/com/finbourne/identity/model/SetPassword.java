@@ -25,77 +25,32 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * ActionId
+ * Set password request
  */
+@ApiModel(description = "Set password request")
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class ActionId {
-  public static final String SERIALIZED_NAME_SCOPE = "scope";
-  @SerializedName(SERIALIZED_NAME_SCOPE)
-  private String scope;
-
-  public static final String SERIALIZED_NAME_ACTIVITY = "activity";
-  @SerializedName(SERIALIZED_NAME_ACTIVITY)
-  private String activity;
-
-  public static final String SERIALIZED_NAME_ENTITY = "entity";
-  @SerializedName(SERIALIZED_NAME_ENTITY)
-  private String entity;
+public class SetPassword {
+  public static final String SERIALIZED_NAME_VALUE = "value";
+  @SerializedName(SERIALIZED_NAME_VALUE)
+  private String value;
 
 
-  public ActionId scope(String scope) {
-    this.scope = scope; 
+  public SetPassword value(String value) {
+    this.value = value; 
     return this;
   }
 
    /**
-   * Get scope
-   * @return scope
+   * The value of the new password
+   * @return value
   **/
-  @ApiModelProperty(required = true, value = "")
-  public String getScope() {
-    return scope;
+  @ApiModelProperty(required = true, value = "The value of the new password")
+  public String getValue() {
+    return value;
   }
 
-  public void setScope(String scope) {
-    this.scope = scope;
-  }
-
-
-  public ActionId activity(String activity) {
-    this.activity = activity; 
-    return this;
-  }
-
-   /**
-   * Get activity
-   * @return activity
-  **/
-  @ApiModelProperty(required = true, value = "")
-  public String getActivity() {
-    return activity;
-  }
-
-  public void setActivity(String activity) {
-    this.activity = activity;
-  }
-
-
-  public ActionId entity(String entity) {
-    this.entity = entity; 
-    return this;
-  }
-
-   /**
-   * Get entity
-   * @return entity
-  **/
-  @ApiModelProperty(required = true, value = "")
-  public String getEntity() {
-    return entity;
-  }
-
-  public void setEntity(String entity) {
-    this.entity = entity;
+  public void setValue(String value) {
+    this.value = value;
   }
 
 
@@ -118,10 +73,8 @@ public class ActionId {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ActionId {\n");
-    sb.append("    scope: ").append(toIndentedString(scope)).append("\n");
-    sb.append("    activity: ").append(toIndentedString(activity)).append("\n");
-    sb.append("    entity: ").append(toIndentedString(entity)).append("\n");
+    sb.append("class SetPassword {\n");
+    sb.append("    value: ").append(toIndentedString(value)).append("\n");
     sb.append("}");
     return sb.toString();
   }
