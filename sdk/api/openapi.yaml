@@ -6,7 +6,7 @@ info:
     url: https://www.finbourne.com
   termsOfService: https://www.finbourne.com/legal/terms-conditions
   title: FINBOURNE Identity Service API
-  version: 0.0.1632
+  version: 0.0.1634
   x-logo:
     url: https://www.lusid.com/app/assets/logo_white.png
     backgroundColor: '#415464'
@@ -217,10 +217,6 @@ paths:
                 $ref: '#/components/schemas/OAuthApplication'
           description: Get the specified application
         "404":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
           description: Not Found
         "400":
           content:
@@ -870,16 +866,6 @@ paths:
         style: simple
       responses:
         "404":
-          content:
-            text/plain:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
           description: Not Found
         "200":
           content:
@@ -1370,10 +1356,6 @@ paths:
                 $ref: '#/components/schemas/RoleResponse'
           description: Create a new role
         "409":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
           description: A role with the same Name already exists.
         "400":
           content:
@@ -1466,10 +1448,6 @@ paths:
                 $ref: '#/components/schemas/RoleResponse'
           description: Get the specified role
         "404":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
           description: Not Found
         "400":
           content:
@@ -1545,10 +1523,6 @@ paths:
                 $ref: '#/components/schemas/RoleResponse'
           description: Update a role
         "404":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
           description: Not Found
         "400":
           content:
@@ -1665,10 +1639,6 @@ paths:
         "204":
           description: Success
         "404":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
           description: Not Found
         "400":
           content:
@@ -1721,10 +1691,6 @@ paths:
         "204":
           description: Success
         "404":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
           description: Not Found
         "400":
           content:
@@ -3367,33 +3333,6 @@ components:
       - id
       - issuer
       - type
-      type: object
-    ProblemDetails:
-      additionalProperties: false
-      properties:
-        type:
-          nullable: true
-          type: string
-        title:
-          nullable: true
-          type: string
-        status:
-          format: int32
-          nullable: true
-          type: integer
-        detail:
-          nullable: true
-          type: string
-        instance:
-          nullable: true
-          type: string
-        extensions:
-          additionalProperties:
-            additionalProperties: false
-            type: object
-          nullable: true
-          readOnly: true
-          type: object
       type: object
     ResourceListOfAccessControlledResource:
       additionalProperties: false
