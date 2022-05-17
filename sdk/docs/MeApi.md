@@ -5,7 +5,7 @@ All URIs are relative to *https://www.lusid.com/identity*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**getUserInfo**](MeApi.md#getUserInfo) | **GET** /api/me | [EARLY ACCESS] GetUserInfo: Get User Info
-[**setPassword**](MeApi.md#setPassword) | **PUT** /api/me/password | [EXPERIMENTAL] SetPassword: Set password of current user
+[**setPassword**](MeApi.md#setPassword) | **PUT** /api/me/password | SetPassword: Set password of current user
 
 
 <a name="getUserInfo"></a>
@@ -76,7 +76,7 @@ This endpoint does not need any parameter.
 # **setPassword**
 > SetPasswordResponse setPassword(setPassword)
 
-[EXPERIMENTAL] SetPassword: Set password of current user
+SetPassword: Set password of current user
 
 Set the password of the current user to the specified value.                Note this is feature is only available to Service users authenticated using OpenID. For further information  relating to usage of this feature please consult the documentation.
 

@@ -6,7 +6,7 @@ info:
     url: https://www.finbourne.com
   termsOfService: https://www.finbourne.com/legal/terms-conditions
   title: FINBOURNE Identity Service API
-  version: 0.0.1648
+  version: 0.0.1652
   x-logo:
     url: https://www.lusid.com/app/assets/logo_white.png
     backgroundColor: '#415464'
@@ -794,42 +794,42 @@ paths:
           content:
             text/plain:
               example:
-                termsAndConditions-20190101-GBP:
-                  name: TermsAndConditions-20190101-GB
-                  signedBy: DomainOwnerUserId
-                  signedAt: 2019-01-05T10:15:00.0000000+00:00
                 termsAndConditions-20190301-GBP:
                   name: TermsAndConditions-20190301-GB
                   signedBy: DomainOwnerUserId
                   signedAt: 2019-03-07T13:23:07.0000000+00:00
+                termsAndConditions-20190101-GBP:
+                  name: TermsAndConditions-20190101-GB
+                  signedBy: DomainOwnerUserId
+                  signedAt: 2019-01-05T10:15:00.0000000+00:00
               schema:
                 additionalProperties:
                   $ref: '#/components/schemas/AgreementResponse'
                 type: object
             application/json:
               example:
-                termsAndConditions-20190101-GBP:
-                  name: TermsAndConditions-20190101-GB
-                  signedBy: DomainOwnerUserId
-                  signedAt: 2019-01-05T10:15:00.0000000+00:00
                 termsAndConditions-20190301-GBP:
                   name: TermsAndConditions-20190301-GB
                   signedBy: DomainOwnerUserId
                   signedAt: 2019-03-07T13:23:07.0000000+00:00
+                termsAndConditions-20190101-GBP:
+                  name: TermsAndConditions-20190101-GB
+                  signedBy: DomainOwnerUserId
+                  signedAt: 2019-01-05T10:15:00.0000000+00:00
               schema:
                 additionalProperties:
                   $ref: '#/components/schemas/AgreementResponse'
                 type: object
             text/json:
               example:
-                termsAndConditions-20190101-GBP:
-                  name: TermsAndConditions-20190101-GB
-                  signedBy: DomainOwnerUserId
-                  signedAt: 2019-01-05T10:15:00.0000000+00:00
                 termsAndConditions-20190301-GBP:
                   name: TermsAndConditions-20190301-GB
                   signedBy: DomainOwnerUserId
                   signedAt: 2019-03-07T13:23:07.0000000+00:00
+                termsAndConditions-20190101-GBP:
+                  name: TermsAndConditions-20190101-GB
+                  signedBy: DomainOwnerUserId
+                  signedAt: 2019-01-05T10:15:00.0000000+00:00
               schema:
                 additionalProperties:
                   $ref: '#/components/schemas/AgreementResponse'
@@ -1207,10 +1207,10 @@ paths:
           description: Error response
       security:
       - oauth2: []
-      summary: '[EXPERIMENTAL] SetPassword: Set password of current user'
+      summary: 'SetPassword: Set password of current user'
       tags:
       - Me
-      x-fbn-apistatus: Experimental
+      x-fbn-apistatus: Stable
       x-contentType: application/json-patch+json
       x-accepts: application/json
   /api/metadata/access/resources:
