@@ -6,7 +6,7 @@ info:
     url: https://www.finbourne.com
   termsOfService: https://www.finbourne.com/legal/terms-conditions
   title: FINBOURNE Identity Service API
-  version: 0.0.1662
+  version: 0.0.1885
   x-logo:
     url: https://www.lusid.com/app/assets/logo_white.png
     backgroundColor: '#415464'
@@ -23,6 +23,8 @@ tags:
   name: Authentication
 - description: Endpoints for administering Domains
   name: Domains
+- description: Endpoints for administering Identity Provider integration
+  name: Identity Provider
 - description: Endpoints for getting more information about the current User
   name: Me
 - description: Endpoints for administering one's own Personal Access Tokens
@@ -794,42 +796,42 @@ paths:
           content:
             text/plain:
               example:
-                termsAndConditions-20190101-GBP:
-                  name: TermsAndConditions-20190101-GB
-                  signedBy: DomainOwnerUserId
-                  signedAt: 2019-01-05T10:15:00.0000000+00:00
                 termsAndConditions-20190301-GBP:
                   name: TermsAndConditions-20190301-GB
                   signedBy: DomainOwnerUserId
                   signedAt: 2019-03-07T13:23:07.0000000+00:00
+                termsAndConditions-20190101-GBP:
+                  name: TermsAndConditions-20190101-GB
+                  signedBy: DomainOwnerUserId
+                  signedAt: 2019-01-05T10:15:00.0000000+00:00
               schema:
                 additionalProperties:
                   $ref: '#/components/schemas/AgreementResponse'
                 type: object
             application/json:
               example:
-                termsAndConditions-20190101-GBP:
-                  name: TermsAndConditions-20190101-GB
-                  signedBy: DomainOwnerUserId
-                  signedAt: 2019-01-05T10:15:00.0000000+00:00
                 termsAndConditions-20190301-GBP:
                   name: TermsAndConditions-20190301-GB
                   signedBy: DomainOwnerUserId
                   signedAt: 2019-03-07T13:23:07.0000000+00:00
+                termsAndConditions-20190101-GBP:
+                  name: TermsAndConditions-20190101-GB
+                  signedBy: DomainOwnerUserId
+                  signedAt: 2019-01-05T10:15:00.0000000+00:00
               schema:
                 additionalProperties:
                   $ref: '#/components/schemas/AgreementResponse'
                 type: object
             text/json:
               example:
-                termsAndConditions-20190101-GBP:
-                  name: TermsAndConditions-20190101-GB
-                  signedBy: DomainOwnerUserId
-                  signedAt: 2019-01-05T10:15:00.0000000+00:00
                 termsAndConditions-20190301-GBP:
                   name: TermsAndConditions-20190301-GB
                   signedBy: DomainOwnerUserId
                   signedAt: 2019-03-07T13:23:07.0000000+00:00
+                termsAndConditions-20190101-GBP:
+                  name: TermsAndConditions-20190101-GB
+                  signedBy: DomainOwnerUserId
+                  signedAt: 2019-01-05T10:15:00.0000000+00:00
               schema:
                 additionalProperties:
                   $ref: '#/components/schemas/AgreementResponse'
@@ -866,19 +868,9 @@ paths:
         style: simple
       responses:
         "404":
-          description: Not Found
+          description: The agreement is not signed
         "200":
-          content:
-            text/plain:
-              schema:
-                type: boolean
-            application/json:
-              schema:
-                type: boolean
-            text/json:
-              schema:
-                type: boolean
-          description: Whether agreement is signed
+          description: The agreement is signed
         "400":
           content:
             text/plain:
@@ -969,6 +961,101 @@ paths:
       tags:
       - Domains
       x-fbn-apistatus: Stable
+      x-accepts: application/json
+  /api/identityprovider/scim:
+    delete:
+      description: Deactivates any existing SCIM API token
+      operationId: RemoveScim
+      responses:
+        "204":
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LusidProblemDetails'
+          description: Error response
+      security:
+      - oauth2: []
+      summary: '[EXPERIMENTAL] RemoveScim: Remove SCIM'
+      tags:
+      - Identity Provider
+      x-fbn-apistatus: Experimental
+      x-accepts: application/json
+    put:
+      description: Generates an API token to be used for SCIM
+      operationId: AddScim
+      parameters:
+      - description: The action to take. For the API token. Defaults to "ensure"
+        explode: true
+        in: query
+        name: apiTokenAction
+        required: false
+        schema:
+          description: The action to take. For the API token. Defaults to "ensure"
+          nullable: true
+          type: string
+        style: form
+      - description: Optional deactivation date for the old API token. Only used if
+          apiTokenAction is "regenerate"
+        explode: true
+        in: query
+        name: oldApiTokenDeactivation
+        required: false
+        schema:
+          description: Optional deactivation date for the old API token. Only used
+            if apiTokenAction is "regenerate"
+          format: date-time
+          nullable: true
+          type: string
+        style: form
+        x-nullable: true
+      responses:
+        "200":
+          content:
+            text/plain:
+              example:
+                baseUrl: https://my-domain.lusid.com/identity/scim/v2
+                apiToken: ba5e8bed1cbd92f3cc4a893a48141ff23617b258cb7f1407f3567d1f35d0f0e0
+              schema:
+                $ref: '#/components/schemas/AddScimResponse'
+            application/json:
+              example:
+                baseUrl: https://my-domain.lusid.com/identity/scim/v2
+                apiToken: ba5e8bed1cbd92f3cc4a893a48141ff23617b258cb7f1407f3567d1f35d0f0e0
+              schema:
+                $ref: '#/components/schemas/AddScimResponse'
+            text/json:
+              example:
+                baseUrl: https://my-domain.lusid.com/identity/scim/v2
+                apiToken: ba5e8bed1cbd92f3cc4a893a48141ff23617b258cb7f1407f3567d1f35d0f0e0
+              schema:
+                $ref: '#/components/schemas/AddScimResponse'
+          description: The base URL and API token to be used
+        "400":
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/LusidValidationProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LusidValidationProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/LusidValidationProblemDetails'
+          description: The details of the input related failure
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LusidProblemDetails'
+          description: Error response
+      security:
+      - oauth2: []
+      summary: '[EXPERIMENTAL] AddScim: Add SCIM'
+      tags:
+      - Identity Provider
+      x-fbn-apistatus: Experimental
       x-accepts: application/json
   /api/keys:
     get:
@@ -2165,10 +2252,11 @@ paths:
           description: Error response
       security:
       - oauth2: []
-      summary: '[BETA] SendActivationEmail: Sends an activation email to the User'
+      summary: '[EARLY ACCESS] SendActivationEmail: Sends an activation email to the
+        User'
       tags:
       - Users
-      x-fbn-apistatus: Beta
+      x-fbn-apistatus: EarlyAccess
       x-accepts: application/json
   /api/users/{id}/lifecycle/$expirepassword:
     post:
@@ -2208,10 +2296,11 @@ paths:
           description: Error response
       security:
       - oauth2: []
-      summary: '[BETA] ExpirePassword: Reset the user''s password to a temporary one'
+      summary: '[EARLY ACCESS] ExpirePassword: Reset the user''s password to a temporary
+        one'
       tags:
       - Users
-      x-fbn-apistatus: Beta
+      x-fbn-apistatus: EarlyAccess
       x-accepts: application/json
   /api/users/{id}/lifecycle/$resetfactors:
     post:
@@ -2248,10 +2337,10 @@ paths:
           description: Error response
       security:
       - oauth2: []
-      summary: '[BETA] ResetFactors: Reset MFA factors'
+      summary: '[EARLY ACCESS] ResetFactors: Reset MFA factors'
       tags:
       - Users
-      x-fbn-apistatus: Beta
+      x-fbn-apistatus: EarlyAccess
       x-accepts: application/json
   /api/users/{id}/lifecycle/$resetpassword:
     post:
@@ -2287,10 +2376,10 @@ paths:
           description: Error response
       security:
       - oauth2: []
-      summary: '[BETA] ResetPassword: Reset Password'
+      summary: '[EARLY ACCESS] ResetPassword: Reset Password'
       tags:
       - Users
-      x-fbn-apistatus: Beta
+      x-fbn-apistatus: EarlyAccess
       x-accepts: application/json
   /api/users/{id}/lifecycle/$unlock:
     post:
@@ -2326,10 +2415,10 @@ paths:
           description: Error response
       security:
       - oauth2: []
-      summary: '[BETA] UnlockUser: Unlock User'
+      summary: '[EARLY ACCESS] UnlockUser: Unlock User'
       tags:
       - Users
-      x-fbn-apistatus: Beta
+      x-fbn-apistatus: EarlyAccess
       x-accepts: application/json
 components:
   schemas:
@@ -2561,6 +2650,20 @@ components:
       - activity
       - entity
       - scope
+      type: object
+    AddScimResponse:
+      additionalProperties: false
+      example:
+        baseUrl: https://openapi-generator.tech
+        apiToken: apiToken
+      properties:
+        baseUrl:
+          format: uri
+          nullable: true
+          type: string
+        apiToken:
+          nullable: true
+          type: string
       type: object
     AgreementResponse:
       additionalProperties: false
@@ -4025,6 +4128,7 @@ x-tagGroups:
   - Applications
   - Authentication
   - Domains
+  - Identity Provider
   - Me
   - Personal Authentication Tokens
   - Roles

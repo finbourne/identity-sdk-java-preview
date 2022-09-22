@@ -8,7 +8,7 @@
       "url": "https://www.finbourne.com",
       "email": "info@finbourne.com"
     },
-    "version": "0.0.1662",
+    "version": "0.0.1885",
     "x-logo": {
       "url": "https://www.lusid.com/app/assets/logo_white.png",
       "backgroundColor": "#415464"
@@ -1104,15 +1104,15 @@
                   }
                 },
                 "example": {
-  "termsAndConditions-20190101-GBP": {
-    "name": "TermsAndConditions-20190101-GB",
-    "signedBy": "DomainOwnerUserId",
-    "signedAt": "2019-01-05T10:15:00.0000000+00:00"
-  },
   "termsAndConditions-20190301-GBP": {
     "name": "TermsAndConditions-20190301-GB",
     "signedBy": "DomainOwnerUserId",
     "signedAt": "2019-03-07T13:23:07.0000000+00:00"
+  },
+  "termsAndConditions-20190101-GBP": {
+    "name": "TermsAndConditions-20190101-GB",
+    "signedBy": "DomainOwnerUserId",
+    "signedAt": "2019-01-05T10:15:00.0000000+00:00"
   }
 }
               },
@@ -1124,15 +1124,15 @@
                   }
                 },
                 "example": {
-  "termsAndConditions-20190101-GBP": {
-    "name": "TermsAndConditions-20190101-GB",
-    "signedBy": "DomainOwnerUserId",
-    "signedAt": "2019-01-05T10:15:00.0000000+00:00"
-  },
   "termsAndConditions-20190301-GBP": {
     "name": "TermsAndConditions-20190301-GB",
     "signedBy": "DomainOwnerUserId",
     "signedAt": "2019-03-07T13:23:07.0000000+00:00"
+  },
+  "termsAndConditions-20190101-GBP": {
+    "name": "TermsAndConditions-20190101-GB",
+    "signedBy": "DomainOwnerUserId",
+    "signedAt": "2019-01-05T10:15:00.0000000+00:00"
   }
 }
               },
@@ -1144,15 +1144,15 @@
                   }
                 },
                 "example": {
-  "termsAndConditions-20190101-GBP": {
-    "name": "TermsAndConditions-20190101-GB",
-    "signedBy": "DomainOwnerUserId",
-    "signedAt": "2019-01-05T10:15:00.0000000+00:00"
-  },
   "termsAndConditions-20190301-GBP": {
     "name": "TermsAndConditions-20190301-GB",
     "signedBy": "DomainOwnerUserId",
     "signedAt": "2019-03-07T13:23:07.0000000+00:00"
+  },
+  "termsAndConditions-20190101-GBP": {
+    "name": "TermsAndConditions-20190101-GB",
+    "signedBy": "DomainOwnerUserId",
+    "signedAt": "2019-01-05T10:15:00.0000000+00:00"
   }
 }
               }
@@ -1296,25 +1296,112 @@
         ],
         "responses": {
           "404": {
-            "description": "Not Found"
+            "description": "The agreement is not signed"
           },
           "200": {
-            "description": "Whether agreement is signed",
+            "description": "The agreement is signed"
+          },
+          "400": {
+            "description": "The details of the input related failure",
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/LusidValidationProblemDetails"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/LusidValidationProblemDetails"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/LusidValidationProblemDetails"
                 }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LusidProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": [ ]
+          }
+        ],
+        "x-fbn-apistatus": "Stable"
+      }
+    },
+    "/api/identityprovider/scim": {
+      "put": {
+        "tags": [
+          "Identity Provider"
+        ],
+        "summary": "[EXPERIMENTAL] AddScim: Add SCIM",
+        "description": "Generates an API token to be used for SCIM",
+        "operationId": "AddScim",
+        "parameters": [
+          {
+            "name": "apiTokenAction",
+            "in": "query",
+            "description": "The action to take. For the API token. Defaults to \"ensure\"",
+            "schema": {
+              "type": "string",
+              "description": "The action to take. For the API token. Defaults to \"ensure\"",
+              "nullable": true
+            }
+          },
+          {
+            "name": "oldApiTokenDeactivation",
+            "in": "query",
+            "description": "Optional deactivation date for the old API token. Only used if apiTokenAction is \"regenerate\"",
+            "schema": {
+              "type": "string",
+              "description": "Optional deactivation date for the old API token. Only used if apiTokenAction is \"regenerate\"",
+              "format": "date-time",
+              "nullable": true
+            },
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The base URL and API token to be used",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddScimResponse"
+                },
+                "example": {
+  "baseUrl": "https://my-domain.lusid.com/identity/scim/v2",
+  "apiToken": "ba5e8bed1cbd92f3cc4a893a48141ff23617b258cb7f1407f3567d1f35d0f0e0"
+}
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddScimResponse"
+                },
+                "example": {
+  "baseUrl": "https://my-domain.lusid.com/identity/scim/v2",
+  "apiToken": "ba5e8bed1cbd92f3cc4a893a48141ff23617b258cb7f1407f3567d1f35d0f0e0"
+}
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddScimResponse"
+                },
+                "example": {
+  "baseUrl": "https://my-domain.lusid.com/identity/scim/v2",
+  "apiToken": "ba5e8bed1cbd92f3cc4a893a48141ff23617b258cb7f1407f3567d1f35d0f0e0"
+}
               }
             }
           },
@@ -1354,7 +1441,36 @@
             "oauth2": [ ]
           }
         ],
-        "x-fbn-apistatus": "Stable"
+        "x-fbn-apistatus": "Experimental"
+      },
+      "delete": {
+        "tags": [
+          "Identity Provider"
+        ],
+        "summary": "[EXPERIMENTAL] RemoveScim: Remove SCIM",
+        "description": "Deactivates any existing SCIM API token",
+        "operationId": "RemoveScim",
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LusidProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": [ ]
+          }
+        ],
+        "x-fbn-apistatus": "Experimental"
       }
     },
     "/api/keys": {
@@ -3000,7 +3116,7 @@
         "tags": [
           "Users"
         ],
-        "summary": "[BETA] SendActivationEmail: Sends an activation email to the User",
+        "summary": "[EARLY ACCESS] SendActivationEmail: Sends an activation email to the User",
         "description": "Sends an activation email to the specified User",
         "operationId": "SendActivationEmail",
         "parameters": [
@@ -3048,7 +3164,7 @@
             "oauth2": [ ]
           }
         ],
-        "x-fbn-apistatus": "Beta"
+        "x-fbn-apistatus": "EarlyAccess"
       }
     },
     "/api/users/{id}/lifecycle/$expirepassword": {
@@ -3056,7 +3172,7 @@
         "tags": [
           "Users"
         ],
-        "summary": "[BETA] ExpirePassword: Reset the user's password to a temporary one",
+        "summary": "[EARLY ACCESS] ExpirePassword: Reset the user's password to a temporary one",
         "description": "Resets the user's password to a temporary one which is then expired",
         "operationId": "ExpirePassword",
         "parameters": [
@@ -3111,7 +3227,7 @@
             "oauth2": [ ]
           }
         ],
-        "x-fbn-apistatus": "Beta"
+        "x-fbn-apistatus": "EarlyAccess"
       }
     },
     "/api/users/{id}/lifecycle/$resetfactors": {
@@ -3119,7 +3235,7 @@
         "tags": [
           "Users"
         ],
-        "summary": "[BETA] ResetFactors: Reset MFA factors",
+        "summary": "[EARLY ACCESS] ResetFactors: Reset MFA factors",
         "description": "Resets the MFA factors of the specified User",
         "operationId": "ResetFactors",
         "parameters": [
@@ -3167,7 +3283,7 @@
             "oauth2": [ ]
           }
         ],
-        "x-fbn-apistatus": "Beta"
+        "x-fbn-apistatus": "EarlyAccess"
       }
     },
     "/api/users/{id}/lifecycle/$resetpassword": {
@@ -3175,7 +3291,7 @@
         "tags": [
           "Users"
         ],
-        "summary": "[BETA] ResetPassword: Reset Password",
+        "summary": "[EARLY ACCESS] ResetPassword: Reset Password",
         "description": "Resets the password of the specified User",
         "operationId": "ResetPassword",
         "parameters": [
@@ -3223,7 +3339,7 @@
             "oauth2": [ ]
           }
         ],
-        "x-fbn-apistatus": "Beta"
+        "x-fbn-apistatus": "EarlyAccess"
       }
     },
     "/api/users/{id}/lifecycle/$unlock": {
@@ -3231,7 +3347,7 @@
         "tags": [
           "Users"
         ],
-        "summary": "[BETA] UnlockUser: Unlock User",
+        "summary": "[EARLY ACCESS] UnlockUser: Unlock User",
         "description": "Unlocks the specified User",
         "operationId": "UnlockUser",
         "parameters": [
@@ -3279,7 +3395,7 @@
             "oauth2": [ ]
           }
         ],
-        "x-fbn-apistatus": "Beta"
+        "x-fbn-apistatus": "EarlyAccess"
       }
     }
   },
@@ -3378,6 +3494,21 @@
             "maxLength": 25,
             "minLength": 3,
             "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AddScimResponse": {
+        "type": "object",
+        "properties": {
+          "baseUrl": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true
+          },
+          "apiToken": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -4562,6 +4693,10 @@
       "description": "Endpoints for administering Domains"
     },
     {
+      "name": "Identity Provider",
+      "description": "Endpoints for administering Identity Provider integration"
+    },
+    {
       "name": "Me",
       "description": "Endpoints for getting more information about the current User"
     },
@@ -4589,6 +4724,7 @@
       "Applications",
       "Authentication",
       "Domains",
+      "Identity Provider",
       "Me",
       "Personal Authentication Tokens",
       "Roles",

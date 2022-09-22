@@ -84,7 +84,7 @@ Name | Type | Description  | Notes
 
 <a name="getAgreement"></a>
 # **getAgreement**
-> Boolean getAgreement(agreement)
+> getAgreement(agreement)
 
 GetAgreement: Get Agreement
 
@@ -112,8 +112,7 @@ public class Example {
     DomainsApi apiInstance = new DomainsApi(defaultClient);
     String agreement = "agreement_example"; // String | Name of the agreement
     try {
-      Boolean result = apiInstance.getAgreement(agreement);
-      System.out.println(result);
+      apiInstance.getAgreement(agreement);
     } catch (ApiException e) {
       System.err.println("Exception when calling DomainsApi#getAgreement");
       System.err.println("Status code: " + e.getCode());
@@ -133,7 +132,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Boolean**
+null (empty response body)
 
 ### Authorization
 
@@ -147,8 +146,8 @@ Name | Type | Description  | Notes
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**404** | Not Found |  -  |
-**200** | Whether agreement is signed |  -  |
+**404** | The agreement is not signed |  -  |
+**200** | The agreement is signed |  -  |
 **400** | The details of the input related failure |  -  |
 **0** | Error response |  -  |
 

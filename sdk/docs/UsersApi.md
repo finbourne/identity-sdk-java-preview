@@ -6,14 +6,14 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**createUser**](UsersApi.md#createUser) | **POST** /api/users | [EARLY ACCESS] CreateUser: Create User
 [**deleteUser**](UsersApi.md#deleteUser) | **DELETE** /api/users/{id} | [EARLY ACCESS] DeleteUser: Delete User
-[**expirePassword**](UsersApi.md#expirePassword) | **POST** /api/users/{id}/lifecycle/$expirepassword | [BETA] ExpirePassword: Reset the user&#39;s password to a temporary one
+[**expirePassword**](UsersApi.md#expirePassword) | **POST** /api/users/{id}/lifecycle/$expirepassword | [EARLY ACCESS] ExpirePassword: Reset the user&#39;s password to a temporary one
 [**findUsersById**](UsersApi.md#findUsersById) | **GET** /api/directory | [EARLY ACCESS] FindUsersById: Find users by id endpoint
 [**getUser**](UsersApi.md#getUser) | **GET** /api/users/{id} | [EARLY ACCESS] GetUser: Get User
 [**listUsers**](UsersApi.md#listUsers) | **GET** /api/users | [EARLY ACCESS] ListUsers: List Users
-[**resetFactors**](UsersApi.md#resetFactors) | **POST** /api/users/{id}/lifecycle/$resetfactors | [BETA] ResetFactors: Reset MFA factors
-[**resetPassword**](UsersApi.md#resetPassword) | **POST** /api/users/{id}/lifecycle/$resetpassword | [BETA] ResetPassword: Reset Password
-[**sendActivationEmail**](UsersApi.md#sendActivationEmail) | **POST** /api/users/{id}/lifecycle/$activate | [BETA] SendActivationEmail: Sends an activation email to the User
-[**unlockUser**](UsersApi.md#unlockUser) | **POST** /api/users/{id}/lifecycle/$unlock | [BETA] UnlockUser: Unlock User
+[**resetFactors**](UsersApi.md#resetFactors) | **POST** /api/users/{id}/lifecycle/$resetfactors | [EARLY ACCESS] ResetFactors: Reset MFA factors
+[**resetPassword**](UsersApi.md#resetPassword) | **POST** /api/users/{id}/lifecycle/$resetpassword | [EARLY ACCESS] ResetPassword: Reset Password
+[**sendActivationEmail**](UsersApi.md#sendActivationEmail) | **POST** /api/users/{id}/lifecycle/$activate | [EARLY ACCESS] SendActivationEmail: Sends an activation email to the User
+[**unlockUser**](UsersApi.md#unlockUser) | **POST** /api/users/{id}/lifecycle/$unlock | [EARLY ACCESS] UnlockUser: Unlock User
 [**updateUser**](UsersApi.md#updateUser) | **PUT** /api/users/{id} | [EARLY ACCESS] UpdateUser: Update User
 
 
@@ -162,7 +162,7 @@ null (empty response body)
 # **expirePassword**
 > TemporaryPassword expirePassword(id)
 
-[BETA] ExpirePassword: Reset the user&#39;s password to a temporary one
+[EARLY ACCESS] ExpirePassword: Reset the user&#39;s password to a temporary one
 
 Resets the user&#39;s password to a temporary one which is then expired
 
@@ -442,7 +442,7 @@ Name | Type | Description  | Notes
 # **resetFactors**
 > resetFactors(id)
 
-[BETA] ResetFactors: Reset MFA factors
+[EARLY ACCESS] ResetFactors: Reset MFA factors
 
 Resets the MFA factors of the specified User
 
@@ -510,7 +510,7 @@ null (empty response body)
 # **resetPassword**
 > resetPassword(id)
 
-[BETA] ResetPassword: Reset Password
+[EARLY ACCESS] ResetPassword: Reset Password
 
 Resets the password of the specified User
 
@@ -578,7 +578,7 @@ null (empty response body)
 # **sendActivationEmail**
 > sendActivationEmail(id)
 
-[BETA] SendActivationEmail: Sends an activation email to the User
+[EARLY ACCESS] SendActivationEmail: Sends an activation email to the User
 
 Sends an activation email to the specified User
 
@@ -646,7 +646,7 @@ null (empty response body)
 # **unlockUser**
 > unlockUser(id)
 
-[BETA] UnlockUser: Unlock User
+[EARLY ACCESS] UnlockUser: Unlock User
 
 Unlocks the specified User
 

@@ -23,79 +23,57 @@ import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
+import java.net.URI;
 
 /**
- * ActionId
+ * AddScimResponse
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class ActionId {
-  public static final String SERIALIZED_NAME_SCOPE = "scope";
-  @SerializedName(SERIALIZED_NAME_SCOPE)
-  private String scope;
+public class AddScimResponse {
+  public static final String SERIALIZED_NAME_BASE_URL = "baseUrl";
+  @SerializedName(SERIALIZED_NAME_BASE_URL)
+  private URI baseUrl;
 
-  public static final String SERIALIZED_NAME_ACTIVITY = "activity";
-  @SerializedName(SERIALIZED_NAME_ACTIVITY)
-  private String activity;
-
-  public static final String SERIALIZED_NAME_ENTITY = "entity";
-  @SerializedName(SERIALIZED_NAME_ENTITY)
-  private String entity;
+  public static final String SERIALIZED_NAME_API_TOKEN = "apiToken";
+  @SerializedName(SERIALIZED_NAME_API_TOKEN)
+  private String apiToken;
 
 
-  public ActionId scope(String scope) {
-    this.scope = scope; 
+  public AddScimResponse baseUrl(URI baseUrl) {
+    this.baseUrl = baseUrl; 
     return this;
   }
 
    /**
-   * Get scope
-   * @return scope
+   * Get baseUrl
+   * @return baseUrl
   **/
-  @ApiModelProperty(required = true, value = "")
-  public String getScope() {
-    return scope;
+  @ApiModelProperty(value = "")
+  public URI getBaseUrl() {
+    return baseUrl;
   }
 
-  public void setScope(String scope) {
-    this.scope = scope;
+  public void setBaseUrl(URI baseUrl) {
+    this.baseUrl = baseUrl;
   }
 
 
-  public ActionId activity(String activity) {
-    this.activity = activity; 
+  public AddScimResponse apiToken(String apiToken) {
+    this.apiToken = apiToken; 
     return this;
   }
 
    /**
-   * Get activity
-   * @return activity
+   * Get apiToken
+   * @return apiToken
   **/
-  @ApiModelProperty(required = true, value = "")
-  public String getActivity() {
-    return activity;
+  @ApiModelProperty(value = "")
+  public String getApiToken() {
+    return apiToken;
   }
 
-  public void setActivity(String activity) {
-    this.activity = activity;
-  }
-
-
-  public ActionId entity(String entity) {
-    this.entity = entity; 
-    return this;
-  }
-
-   /**
-   * Get entity
-   * @return entity
-  **/
-  @ApiModelProperty(required = true, value = "")
-  public String getEntity() {
-    return entity;
-  }
-
-  public void setEntity(String entity) {
-    this.entity = entity;
+  public void setApiToken(String apiToken) {
+    this.apiToken = apiToken;
   }
 
 
@@ -118,10 +96,9 @@ public class ActionId {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ActionId {\n");
-    sb.append("    scope: ").append(toIndentedString(scope)).append("\n");
-    sb.append("    activity: ").append(toIndentedString(activity)).append("\n");
-    sb.append("    entity: ").append(toIndentedString(entity)).append("\n");
+    sb.append("class AddScimResponse {\n");
+    sb.append("    baseUrl: ").append(toIndentedString(baseUrl)).append("\n");
+    sb.append("    apiToken: ").append(toIndentedString(apiToken)).append("\n");
     sb.append("}");
     return sb.toString();
   }

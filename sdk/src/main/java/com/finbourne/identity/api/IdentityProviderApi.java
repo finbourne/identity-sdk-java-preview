@@ -27,11 +27,10 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
-import com.finbourne.identity.model.CurrentUserResponse;
+import com.finbourne.identity.model.AddScimResponse;
 import com.finbourne.identity.model.LusidProblemDetails;
 import com.finbourne.identity.model.LusidValidationProblemDetails;
-import com.finbourne.identity.model.SetPassword;
-import com.finbourne.identity.model.SetPasswordResponse;
+import java.time.OffsetDateTime;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -39,13 +38,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MeApi {
+public class IdentityProviderApi {
     private ApiClient localVarApiClient;
-    public MeApi() {
+    public IdentityProviderApi() {
         this(Configuration.getDefaultApiClient());
     }
 
-    public MeApi(ApiClient apiClient) {
+    public IdentityProviderApi(ApiClient apiClient) {
         this.localVarApiClient = apiClient;
     }
 
@@ -58,22 +57,149 @@ public class MeApi {
     }
 
     /**
-     * Build call for getUserInfo
+     * Build call for addScim
+     * @param apiTokenAction The action to take. For the API token. Defaults to \&quot;ensure\&quot; (optional)
+     * @param oldApiTokenDeactivation Optional deactivation date for the old API token. Only used if apiTokenAction is \&quot;regenerate\&quot; (optional)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Get the specified user&#39;s info </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> The base URL and API token to be used </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The details of the input related failure </td><td>  -  </td></tr>
         <tr><td> 0 </td><td> Error response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call getUserInfoCall(final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call addScimCall(String apiTokenAction, OffsetDateTime oldApiTokenDeactivation, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 
         // create path and map variables
-        String localVarPath = "/api/me";
+        String localVarPath = "/api/identityprovider/scim";
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        if (apiTokenAction != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("apiTokenAction", apiTokenAction));
+        }
+
+        if (oldApiTokenDeactivation != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("oldApiTokenDeactivation", oldApiTokenDeactivation));
+        }
+
+        final String[] localVarAccepts = {
+            "text/plain", "application/json", "text/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+        localVarHeaderParams.put("X-LUSID-SDK-Language", "Java");
+        localVarHeaderParams.put("X-LUSID-SDK-Version", "0.0.1885");
+
+        String[] localVarAuthNames = new String[] { "oauth2" };
+        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call addScimValidateBeforeCall(String apiTokenAction, OffsetDateTime oldApiTokenDeactivation, final ApiCallback _callback) throws ApiException {
+        
+
+        okhttp3.Call localVarCall = addScimCall(apiTokenAction, oldApiTokenDeactivation, _callback);
+        return localVarCall;
+
+    }
+
+    /**
+     * [EXPERIMENTAL] AddScim: Add SCIM
+     * Generates an API token to be used for SCIM
+     * @param apiTokenAction The action to take. For the API token. Defaults to \&quot;ensure\&quot; (optional)
+     * @param oldApiTokenDeactivation Optional deactivation date for the old API token. Only used if apiTokenAction is \&quot;regenerate\&quot; (optional)
+     * @return AddScimResponse
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> The base URL and API token to be used </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The details of the input related failure </td><td>  -  </td></tr>
+        <tr><td> 0 </td><td> Error response </td><td>  -  </td></tr>
+     </table>
+     */
+    public AddScimResponse addScim(String apiTokenAction, OffsetDateTime oldApiTokenDeactivation) throws ApiException {
+        ApiResponse<AddScimResponse> localVarResp = addScimWithHttpInfo(apiTokenAction, oldApiTokenDeactivation);
+        return localVarResp.getData();
+    }
+
+    /**
+     * [EXPERIMENTAL] AddScim: Add SCIM
+     * Generates an API token to be used for SCIM
+     * @param apiTokenAction The action to take. For the API token. Defaults to \&quot;ensure\&quot; (optional)
+     * @param oldApiTokenDeactivation Optional deactivation date for the old API token. Only used if apiTokenAction is \&quot;regenerate\&quot; (optional)
+     * @return ApiResponse&lt;AddScimResponse&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> The base URL and API token to be used </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The details of the input related failure </td><td>  -  </td></tr>
+        <tr><td> 0 </td><td> Error response </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<AddScimResponse> addScimWithHttpInfo(String apiTokenAction, OffsetDateTime oldApiTokenDeactivation) throws ApiException {
+        okhttp3.Call localVarCall = addScimValidateBeforeCall(apiTokenAction, oldApiTokenDeactivation, null);
+        Type localVarReturnType = new TypeToken<AddScimResponse>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     * [EXPERIMENTAL] AddScim: Add SCIM (asynchronously)
+     * Generates an API token to be used for SCIM
+     * @param apiTokenAction The action to take. For the API token. Defaults to \&quot;ensure\&quot; (optional)
+     * @param oldApiTokenDeactivation Optional deactivation date for the old API token. Only used if apiTokenAction is \&quot;regenerate\&quot; (optional)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> The base URL and API token to be used </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The details of the input related failure </td><td>  -  </td></tr>
+        <tr><td> 0 </td><td> Error response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call addScimAsync(String apiTokenAction, OffsetDateTime oldApiTokenDeactivation, final ApiCallback<AddScimResponse> _callback) throws ApiException {
+        okhttp3.Call localVarCall = addScimValidateBeforeCall(apiTokenAction, oldApiTokenDeactivation, _callback);
+        Type localVarReturnType = new TypeToken<AddScimResponse>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
+    }
+    /**
+     * Build call for removeScim
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 204 </td><td> Success </td><td>  -  </td></tr>
+        <tr><td> 0 </td><td> Error response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call removeScimCall(final ApiCallback _callback) throws ApiException {
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/api/identityprovider/scim";
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
@@ -98,190 +224,66 @@ public class MeApi {
         localVarHeaderParams.put("X-LUSID-SDK-Version", "0.0.1885");
 
         String[] localVarAuthNames = new String[] { "oauth2" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call getUserInfoValidateBeforeCall(final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call removeScimValidateBeforeCall(final ApiCallback _callback) throws ApiException {
         
 
-        okhttp3.Call localVarCall = getUserInfoCall(_callback);
+        okhttp3.Call localVarCall = removeScimCall(_callback);
         return localVarCall;
 
     }
 
     /**
-     * [EARLY ACCESS] GetUserInfo: Get User Info
-     * Get the requesting user&#39;s basic info
-     * @return CurrentUserResponse
+     * [EXPERIMENTAL] RemoveScim: Remove SCIM
+     * Deactivates any existing SCIM API token
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Get the specified user&#39;s info </td><td>  -  </td></tr>
+        <tr><td> 204 </td><td> Success </td><td>  -  </td></tr>
         <tr><td> 0 </td><td> Error response </td><td>  -  </td></tr>
      </table>
      */
-    public CurrentUserResponse getUserInfo() throws ApiException {
-        ApiResponse<CurrentUserResponse> localVarResp = getUserInfoWithHttpInfo();
-        return localVarResp.getData();
+    public void removeScim() throws ApiException {
+        removeScimWithHttpInfo();
     }
 
     /**
-     * [EARLY ACCESS] GetUserInfo: Get User Info
-     * Get the requesting user&#39;s basic info
-     * @return ApiResponse&lt;CurrentUserResponse&gt;
+     * [EXPERIMENTAL] RemoveScim: Remove SCIM
+     * Deactivates any existing SCIM API token
+     * @return ApiResponse&lt;Void&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Get the specified user&#39;s info </td><td>  -  </td></tr>
+        <tr><td> 204 </td><td> Success </td><td>  -  </td></tr>
         <tr><td> 0 </td><td> Error response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<CurrentUserResponse> getUserInfoWithHttpInfo() throws ApiException {
-        okhttp3.Call localVarCall = getUserInfoValidateBeforeCall(null);
-        Type localVarReturnType = new TypeToken<CurrentUserResponse>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    public ApiResponse<Void> removeScimWithHttpInfo() throws ApiException {
+        okhttp3.Call localVarCall = removeScimValidateBeforeCall(null);
+        return localVarApiClient.execute(localVarCall);
     }
 
     /**
-     * [EARLY ACCESS] GetUserInfo: Get User Info (asynchronously)
-     * Get the requesting user&#39;s basic info
+     * [EXPERIMENTAL] RemoveScim: Remove SCIM (asynchronously)
+     * Deactivates any existing SCIM API token
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Get the specified user&#39;s info </td><td>  -  </td></tr>
+        <tr><td> 204 </td><td> Success </td><td>  -  </td></tr>
         <tr><td> 0 </td><td> Error response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call getUserInfoAsync(final ApiCallback<CurrentUserResponse> _callback) throws ApiException {
-        okhttp3.Call localVarCall = getUserInfoValidateBeforeCall(_callback);
-        Type localVarReturnType = new TypeToken<CurrentUserResponse>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for setPassword
-     * @param setPassword The request containing the new password value (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Set the current user&#39;s password </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The details of the input related failure </td><td>  -  </td></tr>
-        <tr><td> 0 </td><td> Error response </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call setPasswordCall(SetPassword setPassword, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = setPassword;
-
-        // create path and map variables
-        String localVarPath = "/api/me/password";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json-patch+json", "application/json", "text/json", "application/_*+json"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-        localVarHeaderParams.put("X-LUSID-SDK-Language", "Java");
-        localVarHeaderParams.put("X-LUSID-SDK-Version", "0.0.1885");
-
-        String[] localVarAuthNames = new String[] { "oauth2" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call setPasswordValidateBeforeCall(SetPassword setPassword, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'setPassword' is set
-        if (setPassword == null) {
-            throw new ApiException("Missing the required parameter 'setPassword' when calling setPassword(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = setPasswordCall(setPassword, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * SetPassword: Set password of current user
-     * Set the password of the current user to the specified value.                Note this is feature is only available to Service users authenticated using OpenID. For further information  relating to usage of this feature please consult the documentation.
-     * @param setPassword The request containing the new password value (required)
-     * @return SetPasswordResponse
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Set the current user&#39;s password </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The details of the input related failure </td><td>  -  </td></tr>
-        <tr><td> 0 </td><td> Error response </td><td>  -  </td></tr>
-     </table>
-     */
-    public SetPasswordResponse setPassword(SetPassword setPassword) throws ApiException {
-        ApiResponse<SetPasswordResponse> localVarResp = setPasswordWithHttpInfo(setPassword);
-        return localVarResp.getData();
-    }
-
-    /**
-     * SetPassword: Set password of current user
-     * Set the password of the current user to the specified value.                Note this is feature is only available to Service users authenticated using OpenID. For further information  relating to usage of this feature please consult the documentation.
-     * @param setPassword The request containing the new password value (required)
-     * @return ApiResponse&lt;SetPasswordResponse&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Set the current user&#39;s password </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The details of the input related failure </td><td>  -  </td></tr>
-        <tr><td> 0 </td><td> Error response </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<SetPasswordResponse> setPasswordWithHttpInfo(SetPassword setPassword) throws ApiException {
-        okhttp3.Call localVarCall = setPasswordValidateBeforeCall(setPassword, null);
-        Type localVarReturnType = new TypeToken<SetPasswordResponse>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * SetPassword: Set password of current user (asynchronously)
-     * Set the password of the current user to the specified value.                Note this is feature is only available to Service users authenticated using OpenID. For further information  relating to usage of this feature please consult the documentation.
-     * @param setPassword The request containing the new password value (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Set the current user&#39;s password </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The details of the input related failure </td><td>  -  </td></tr>
-        <tr><td> 0 </td><td> Error response </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call setPasswordAsync(SetPassword setPassword, final ApiCallback<SetPasswordResponse> _callback) throws ApiException {
-        okhttp3.Call localVarCall = setPasswordValidateBeforeCall(setPassword, _callback);
-        Type localVarReturnType = new TypeToken<SetPasswordResponse>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+    public okhttp3.Call removeScimAsync(final ApiCallback<Void> _callback) throws ApiException {
+        okhttp3.Call localVarCall = removeScimValidateBeforeCall(_callback);
+        localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
 }
