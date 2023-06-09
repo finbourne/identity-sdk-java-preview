@@ -6,7 +6,7 @@ info:
     url: https://www.finbourne.com
   termsOfService: https://www.finbourne.com/legal/terms-conditions
   title: FINBOURNE Identity Service API
-  version: 0.0.1885
+  version: 0.0.2450
   x-logo:
     url: https://www.lusid.com/app/assets/logo_white.png
     backgroundColor: '#415464'
@@ -21,8 +21,6 @@ tags:
   name: Applications
 - description: Endpoints for getting authentication details for the domain
   name: Authentication
-- description: Endpoints for administering Domains
-  name: Domains
 - description: Endpoints for administering Identity Provider integration
   name: Identity Provider
 - description: Endpoints for getting more information about the current User
@@ -148,7 +146,6 @@ paths:
         name: id
         required: true
         schema:
-          description: The unique identifier for the application
           maxLength: 64
           minLength: 1
           pattern: ^[a-zA-Z0-9\-_]+$
@@ -156,7 +153,7 @@ paths:
         style: simple
       responses:
         "204":
-          description: Success
+          description: No Content
         "400":
           content:
             application/json:
@@ -186,7 +183,6 @@ paths:
         name: id
         required: true
         schema:
-          description: The unique identifier for the application
           maxLength: 64
           minLength: 1
           pattern: ^[a-zA-Z0-9\-_]+$
@@ -199,8 +195,6 @@ paths:
         name: includeSecret
         required: false
         schema:
-          description: Optional. If set to true, the application secrets will be returned
-            in plain text
           type: boolean
         style: form
         x-nullable: true
@@ -250,7 +244,6 @@ paths:
         name: id
         required: true
         schema:
-          description: The unique identifier for the application
           maxLength: 64
           minLength: 1
           pattern: ^[a-zA-Z0-9\-_]+$
@@ -302,6 +295,7 @@ paths:
               example:
                 issuerUrl: https://myco.lusid.okta.com/12346
                 samlIdentityProviderId: 0oa14txx1jAiz7T302p7as
+                supportAccessExpiryWithRole: []
               schema:
                 $ref: '#/components/schemas/AuthenticationInformation'
           description: Get authentication information
@@ -335,6 +329,8 @@ paths:
                 expiry: 2020-01-07T12:05:00.0000000+00:00
                 createdBy: UserId-54213
                 terminated: false
+                permittedRoles:
+                - support-role
               - id: 37322a3efbf445fa861d39759ad22dcb
                 duration: PT24H
                 description: Investigate issues detailed in support ticket 0604
@@ -344,6 +340,8 @@ paths:
                 terminated: true
                 terminatedAt: 2020-01-06T16:05:00.0000000+00:00
                 terminatedBy: UserId-54213
+                permittedRoles:
+                - support-role
               schema:
                 items:
                   $ref: '#/components/schemas/SupportAccessResponse'
@@ -380,6 +378,8 @@ paths:
                 expiry: 2020-01-07T12:05:00.0000000+00:00
                 createdBy: UserId-54213
                 terminated: false
+                permittedRoles:
+                - support-role
               - id: 37322a3efbf445fa861d39759ad22dcb
                 duration: PT24H
                 description: Investigate issues detailed in support ticket 0604
@@ -389,6 +389,8 @@ paths:
                 terminated: true
                 terminatedAt: 2020-01-06T16:05:00.0000000+00:00
                 terminatedBy: UserId-54213
+                permittedRoles:
+                - support-role
               schema:
                 items:
                   $ref: '#/components/schemas/SupportAccessResponse'
@@ -455,6 +457,8 @@ paths:
                 expiry: 2020-01-07T12:05:00.0000000+00:00
                 createdBy: UserId-54213
                 terminated: false
+                permittedRoles:
+                - support-role
               schema:
                 $ref: '#/components/schemas/SupportAccessResponse'
           description: Grant Support Access
@@ -479,6 +483,40 @@ paths:
       x-fbn-apistatus: EarlyAccess
       x-contentType: application/json-patch+json
       x-accepts: application/json
+  /api/authentication/support-roles:
+    get:
+      description: Get mapping of support roles, the internal representation to a
+        human friendly representation
+      operationId: GetSupportRoles
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                supportRoles:
+                - label: support-role
+                  description: Description of support role
+                  roleIdentifier:
+                    scope: scope
+                    code: code
+                  internalIdentifier: "1"
+              schema:
+                $ref: '#/components/schemas/SupportRolesResponse'
+          description: Get support roles
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LusidProblemDetails'
+          description: Error response
+      security:
+      - oauth2: []
+      summary: '[EARLY ACCESS] GetSupportRoles: Get mapping of support roles, the
+        internal representation to a human friendly representation'
+      tags:
+      - Authentication
+      x-fbn-apistatus: EarlyAccess
+      x-accepts: application/json
   /api/directory:
     get:
       description: Finds a maximum of 50 users by ID
@@ -490,7 +528,6 @@ paths:
         name: id
         required: true
         schema:
-          description: A list of unique identifiers for the users
           items:
             type: string
           type: array
@@ -569,406 +606,13 @@ paths:
       - Users
       x-fbn-apistatus: EarlyAccess
       x-accepts: application/json
-  /api/domains:
-    post:
-      description: Creates a Domain
-      operationId: CreateDomain
-      parameters:
-      - description: The verification code necessary to create domains
-        explode: true
-        in: query
-        name: code
-        required: true
-        schema:
-          description: The verification code necessary to create domains
-          maxLength: 262144
-          minLength: 1
-          pattern: ^[\s\S]*$
-          type: string
-        style: form
-      requestBody:
-        content:
-          application/json-patch+json:
-            example:
-              domain: MyCo
-              companyName: MyCo USA
-              owner:
-                firstName: Owner
-                lastName: OfAccount
-                emailAddress: owner.ofaccount@myco.com
-                login: owner.ofaccount@myco.com
-                type: Personal
-              signedAgreements:
-              - TermsAndConditions_01012019_Gb
-            schema:
-              $ref: '#/components/schemas/CreateDomainRequest'
-          application/json:
-            example:
-              domain: MyCo
-              companyName: MyCo USA
-              owner:
-                firstName: Owner
-                lastName: OfAccount
-                emailAddress: owner.ofaccount@myco.com
-                login: owner.ofaccount@myco.com
-                type: Personal
-              signedAgreements:
-              - TermsAndConditions_01012019_Gb
-            schema:
-              $ref: '#/components/schemas/CreateDomainRequest'
-          text/json:
-            example:
-              domain: MyCo
-              companyName: MyCo USA
-              owner:
-                firstName: Owner
-                lastName: OfAccount
-                emailAddress: owner.ofaccount@myco.com
-                login: owner.ofaccount@myco.com
-                type: Personal
-              signedAgreements:
-              - TermsAndConditions_01012019_Gb
-            schema:
-              $ref: '#/components/schemas/CreateDomainRequest'
-          application/*+json:
-            example:
-              domain: MyCo
-              companyName: MyCo USA
-              owner:
-                firstName: Owner
-                lastName: OfAccount
-                emailAddress: owner.ofaccount@myco.com
-                login: owner.ofaccount@myco.com
-                type: Personal
-              signedAgreements:
-              - TermsAndConditions_01012019_Gb
-            schema:
-              $ref: '#/components/schemas/CreateDomainRequest'
-        description: The definition of the domain
-        required: true
-      responses:
-        "201":
-          content:
-            text/plain:
-              example:
-                id:
-                  name: MyCo
-                description: US subsidiary of MyCo
-                companyName: MyCo USA
-                owner:
-                  value: DomainOwnerUserId
-                billingContact:
-                  value: BillingContactUserId
-                technicalContact:
-                  value: TechnicalContactUserId
-                created: 2018-12-08T13:30:00.0000000+00:00
-              schema:
-                $ref: '#/components/schemas/DomainResponse'
-            application/json:
-              example:
-                id:
-                  name: MyCo
-                description: US subsidiary of MyCo
-                companyName: MyCo USA
-                owner:
-                  value: DomainOwnerUserId
-                billingContact:
-                  value: BillingContactUserId
-                technicalContact:
-                  value: TechnicalContactUserId
-                created: 2018-12-08T13:30:00.0000000+00:00
-              schema:
-                $ref: '#/components/schemas/DomainResponse'
-            text/json:
-              example:
-                id:
-                  name: MyCo
-                description: US subsidiary of MyCo
-                companyName: MyCo USA
-                owner:
-                  value: DomainOwnerUserId
-                billingContact:
-                  value: BillingContactUserId
-                technicalContact:
-                  value: TechnicalContactUserId
-                created: 2018-12-08T13:30:00.0000000+00:00
-              schema:
-                $ref: '#/components/schemas/DomainResponse'
-          description: The created domain
-        "400":
-          content:
-            text/plain:
-              schema:
-                $ref: '#/components/schemas/LusidValidationProblemDetails'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LusidValidationProblemDetails'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/LusidValidationProblemDetails'
-          description: The details of the input related failure
-        default:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LusidProblemDetails'
-          description: Error response
-      security:
-      - oauth2: []
-      summary: 'CreateDomain: Create Domain'
-      tags:
-      - Domains
-      x-fbn-apistatus: Stable
-      x-contentType: application/json-patch+json
-      x-accepts: application/json
-  /api/domains/me:
-    get:
-      description: Gets the Domain of the requesting User
-      operationId: GetMyDomain
-      responses:
-        "200":
-          content:
-            text/plain:
-              example:
-                id:
-                  name: MyCo
-                description: US subsidiary of MyCo
-                companyName: MyCo USA
-                owner:
-                  value: DomainOwnerUserId
-                billingContact:
-                  value: BillingContactUserId
-                technicalContact:
-                  value: TechnicalContactUserId
-                created: 2018-12-08T13:30:00.0000000+00:00
-              schema:
-                $ref: '#/components/schemas/DomainResponse'
-            application/json:
-              example:
-                id:
-                  name: MyCo
-                description: US subsidiary of MyCo
-                companyName: MyCo USA
-                owner:
-                  value: DomainOwnerUserId
-                billingContact:
-                  value: BillingContactUserId
-                technicalContact:
-                  value: TechnicalContactUserId
-                created: 2018-12-08T13:30:00.0000000+00:00
-              schema:
-                $ref: '#/components/schemas/DomainResponse'
-            text/json:
-              example:
-                id:
-                  name: MyCo
-                description: US subsidiary of MyCo
-                companyName: MyCo USA
-                owner:
-                  value: DomainOwnerUserId
-                billingContact:
-                  value: BillingContactUserId
-                technicalContact:
-                  value: TechnicalContactUserId
-                created: 2018-12-08T13:30:00.0000000+00:00
-              schema:
-                $ref: '#/components/schemas/DomainResponse'
-          description: The current domain
-        default:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LusidProblemDetails'
-          description: Error response
-      security:
-      - oauth2: []
-      summary: 'GetMyDomain: Get current Domain'
-      tags:
-      - Domains
-      x-fbn-apistatus: Stable
-      x-accepts: application/json
-  /api/domains/me/agreements:
-    get:
-      description: Lists the signed agreements for the current domain
-      operationId: ListAgreements
-      responses:
-        "200":
-          content:
-            text/plain:
-              example:
-                termsAndConditions-20190301-GBP:
-                  name: TermsAndConditions-20190301-GB
-                  signedBy: DomainOwnerUserId
-                  signedAt: 2019-03-07T13:23:07.0000000+00:00
-                termsAndConditions-20190101-GBP:
-                  name: TermsAndConditions-20190101-GB
-                  signedBy: DomainOwnerUserId
-                  signedAt: 2019-01-05T10:15:00.0000000+00:00
-              schema:
-                additionalProperties:
-                  $ref: '#/components/schemas/AgreementResponse'
-                type: object
-            application/json:
-              example:
-                termsAndConditions-20190301-GBP:
-                  name: TermsAndConditions-20190301-GB
-                  signedBy: DomainOwnerUserId
-                  signedAt: 2019-03-07T13:23:07.0000000+00:00
-                termsAndConditions-20190101-GBP:
-                  name: TermsAndConditions-20190101-GB
-                  signedBy: DomainOwnerUserId
-                  signedAt: 2019-01-05T10:15:00.0000000+00:00
-              schema:
-                additionalProperties:
-                  $ref: '#/components/schemas/AgreementResponse'
-                type: object
-            text/json:
-              example:
-                termsAndConditions-20190301-GBP:
-                  name: TermsAndConditions-20190301-GB
-                  signedBy: DomainOwnerUserId
-                  signedAt: 2019-03-07T13:23:07.0000000+00:00
-                termsAndConditions-20190101-GBP:
-                  name: TermsAndConditions-20190101-GB
-                  signedBy: DomainOwnerUserId
-                  signedAt: 2019-01-05T10:15:00.0000000+00:00
-              schema:
-                additionalProperties:
-                  $ref: '#/components/schemas/AgreementResponse'
-                type: object
-          description: List the signed agreements for the current domain
-        default:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LusidProblemDetails'
-          description: Error response
-      security:
-      - oauth2: []
-      summary: 'ListAgreements: List Agreements'
-      tags:
-      - Domains
-      x-fbn-apistatus: Stable
-      x-accepts: application/json
-  /api/domains/me/agreements/{agreement}:
-    head:
-      description: Check whether the domain has signed a specific agreement
-      operationId: GetAgreement
-      parameters:
-      - description: Name of the agreement
-        explode: false
-        in: path
-        name: agreement
-        required: true
-        schema:
-          description: Name of the agreement
-          maxLength: 100
-          minLength: 0
-          type: string
-        style: simple
-      responses:
-        "404":
-          description: The agreement is not signed
-        "200":
-          description: The agreement is signed
-        "400":
-          content:
-            text/plain:
-              schema:
-                $ref: '#/components/schemas/LusidValidationProblemDetails'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LusidValidationProblemDetails'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/LusidValidationProblemDetails'
-          description: The details of the input related failure
-        default:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LusidProblemDetails'
-          description: Error response
-      security:
-      - oauth2: []
-      summary: 'GetAgreement: Get Agreement'
-      tags:
-      - Domains
-      x-fbn-apistatus: Stable
-      x-accepts: application/json
-    put:
-      description: Signs a specified agreement. Only the owner of a domain can sign
-        an agreement
-      operationId: SignAgreement
-      parameters:
-      - description: Name of the agreement being signed
-        explode: false
-        in: path
-        name: agreement
-        required: true
-        schema:
-          description: Name of the agreement being signed
-          maxLength: 100
-          minLength: 0
-          type: string
-        style: simple
-      responses:
-        "201":
-          content:
-            text/plain:
-              example:
-                name: TermsAndConditions-20190101-GB
-                signedBy: DomainOwnerUserId
-                signedAt: 2019-01-05T10:15:00.0000000+00:00
-              schema:
-                $ref: '#/components/schemas/AgreementResponse'
-            application/json:
-              example:
-                name: TermsAndConditions-20190101-GB
-                signedBy: DomainOwnerUserId
-                signedAt: 2019-01-05T10:15:00.0000000+00:00
-              schema:
-                $ref: '#/components/schemas/AgreementResponse'
-            text/json:
-              example:
-                name: TermsAndConditions-20190101-GB
-                signedBy: DomainOwnerUserId
-                signedAt: 2019-01-05T10:15:00.0000000+00:00
-              schema:
-                $ref: '#/components/schemas/AgreementResponse'
-          description: Signs a specified agreement
-        "400":
-          content:
-            text/plain:
-              schema:
-                $ref: '#/components/schemas/LusidValidationProblemDetails'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LusidValidationProblemDetails'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/LusidValidationProblemDetails'
-          description: The details of the input related failure
-        default:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LusidProblemDetails'
-          description: Error response
-      security:
-      - oauth2: []
-      summary: 'SignAgreement: Sign Agreement'
-      tags:
-      - Domains
-      x-fbn-apistatus: Stable
-      x-accepts: application/json
   /api/identityprovider/scim:
     delete:
       description: Deactivates any existing SCIM API token
       operationId: RemoveScim
       responses:
         "204":
-          description: Success
+          description: No Content
         default:
           content:
             application/json:
@@ -992,8 +636,6 @@ paths:
         name: apiTokenAction
         required: false
         schema:
-          description: The action to take. For the API token. Defaults to "ensure"
-          nullable: true
           type: string
         style: form
       - description: Optional deactivation date for the old API token. Only used if
@@ -1003,10 +645,7 @@ paths:
         name: oldApiTokenDeactivation
         required: false
         schema:
-          description: Optional deactivation date for the old API token. Only used
-            if apiTokenAction is "regenerate"
           format: date-time
-          nullable: true
           type: string
         style: form
         x-nullable: true
@@ -1175,7 +814,6 @@ paths:
         name: id
         required: true
         schema:
-          description: The id of the Personal Access Token to delete
           maxLength: 64
           minLength: 1
           pattern: ^[a-zA-Z0-9\-_]+$
@@ -1332,36 +970,6 @@ paths:
       - Application Metadata
       x-fbn-apistatus: EarlyAccess
       x-accepts: application/json
-  /api/metadata/eap:
-    get:
-      description: Identify whether there registrations service is available
-      operationId: GetRegistrationAvailability
-      responses:
-        "200":
-          content:
-            text/plain:
-              schema:
-                type: string
-            application/json:
-              schema:
-                type: string
-            text/json:
-              schema:
-                type: string
-          description: Registration availability state
-        default:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LusidProblemDetails'
-          description: Error response
-      security:
-      - oauth2: []
-      summary: '[EARLY ACCESS] GetRegistrationAvailability: Check Registration availability'
-      tags:
-      - Application Metadata
-      x-fbn-apistatus: EarlyAccess
-      x-accepts: application/json
   /api/roles:
     get:
       description: List the available Roles
@@ -1475,7 +1083,6 @@ paths:
         name: id
         required: true
         schema:
-          description: The unique identifier for the role
           maxLength: 64
           minLength: 1
           pattern: ^[a-zA-Z0-9\-_]+$
@@ -1483,7 +1090,7 @@ paths:
         style: simple
       responses:
         "204":
-          description: Success
+          description: No Content
         "400":
           content:
             application/json:
@@ -1513,7 +1120,6 @@ paths:
         name: id
         required: true
         schema:
-          description: The unique identifier for the role
           maxLength: 64
           minLength: 1
           pattern: ^[a-zA-Z0-9\-_]+$
@@ -1565,7 +1171,6 @@ paths:
         name: id
         required: true
         schema:
-          description: The unique identifier for the role to be updated
           maxLength: 64
           minLength: 1
           pattern: ^[a-zA-Z0-9\-_]+$
@@ -1642,7 +1247,6 @@ paths:
         name: id
         required: true
         schema:
-          description: The unique identifier for the Role
           maxLength: 64
           minLength: 1
           pattern: ^[a-zA-Z0-9\-_]+$
@@ -1704,7 +1308,6 @@ paths:
         name: id
         required: true
         schema:
-          description: The unique identifier for the Role
           maxLength: 64
           minLength: 1
           pattern: ^[a-zA-Z0-9\-_]+$
@@ -1716,7 +1319,6 @@ paths:
         name: userId
         required: true
         schema:
-          description: The unique identifier for the User
           maxLength: 64
           minLength: 1
           pattern: ^[a-zA-Z0-9\-_]+$
@@ -1724,7 +1326,7 @@ paths:
         style: simple
       responses:
         "204":
-          description: Success
+          description: No Content
         "404":
           description: Not Found
         "400":
@@ -1756,7 +1358,6 @@ paths:
         name: id
         required: true
         schema:
-          description: The unique identifier for the Role
           maxLength: 64
           minLength: 1
           pattern: ^[a-zA-Z0-9\-_]+$
@@ -1768,7 +1369,6 @@ paths:
         name: userId
         required: true
         schema:
-          description: The unique identifier for the User
           maxLength: 64
           minLength: 1
           pattern: ^[a-zA-Z0-9\-_]+$
@@ -1776,7 +1376,7 @@ paths:
         style: simple
       responses:
         "204":
-          description: Success
+          description: No Content
         "404":
           description: Not Found
         "400":
@@ -1805,7 +1405,7 @@ paths:
       operationId: InvalidateToken
       responses:
         "204":
-          description: Success
+          description: No Content
         default:
           content:
             application/json:
@@ -1833,8 +1433,6 @@ paths:
         required: false
         schema:
           default: false
-          description: Flag indicating that the users roles should be included in
-            the response
           type: boolean
         style: form
         x-nullable: true
@@ -1845,7 +1443,6 @@ paths:
         required: false
         schema:
           default: false
-          description: Include previously deleted (not purged) users
           type: boolean
         style: form
         x-nullable: true
@@ -1906,8 +1503,6 @@ paths:
         required: false
         schema:
           default: false
-          description: Should the request wait until the newly created User is indexed
-            (available in List) before returning
           type: boolean
         style: form
         x-nullable: true
@@ -2010,7 +1605,6 @@ paths:
         name: id
         required: true
         schema:
-          description: The unique identifier for the user
           maxLength: 64
           minLength: 1
           pattern: ^[a-zA-Z0-9\-_]+$
@@ -2023,14 +1617,12 @@ paths:
         name: purge
         required: false
         schema:
-          description: Whether to purge any trace of the user from the identity provider
-            (will affect audit)
           type: boolean
         style: form
         x-nullable: true
       responses:
         "204":
-          description: Success
+          description: No Content
         "400":
           content:
             application/json:
@@ -2060,7 +1652,6 @@ paths:
         name: id
         required: true
         schema:
-          description: The unique identifier for the User
           maxLength: 64
           minLength: 1
           pattern: ^[a-zA-Z0-9\-_]+$
@@ -2073,9 +1664,6 @@ paths:
         name: includeRoles
         required: false
         schema:
-          description: Flag indicating that the users roles should be included in
-            the response
-          nullable: true
           type: boolean
         style: form
         x-nullable: true
@@ -2132,7 +1720,6 @@ paths:
         name: id
         required: true
         schema:
-          description: The unique identifier for the User to be updated
           maxLength: 64
           minLength: 1
           pattern: ^[a-zA-Z0-9\-_]+$
@@ -2229,7 +1816,6 @@ paths:
         name: id
         required: true
         schema:
-          description: The unique identifier for the User to be activated
           maxLength: 64
           minLength: 1
           pattern: ^[a-zA-Z0-9\-_]+$
@@ -2237,7 +1823,7 @@ paths:
         style: simple
       responses:
         "204":
-          description: Success
+          description: No Content
         "400":
           content:
             application/json:
@@ -2269,7 +1855,6 @@ paths:
         name: id
         required: true
         schema:
-          description: The unique identifier for the User having its password reset
           maxLength: 64
           minLength: 1
           pattern: ^[a-zA-Z0-9\-_]+$
@@ -2313,8 +1898,6 @@ paths:
         name: id
         required: true
         schema:
-          description: The unique identifier for the User having their MFA factors
-            reset
           maxLength: 64
           minLength: 1
           pattern: ^[a-zA-Z0-9\-_]+$
@@ -2322,7 +1905,7 @@ paths:
         style: simple
       responses:
         "204":
-          description: Success
+          description: No Content
         "400":
           content:
             application/json:
@@ -2353,7 +1936,6 @@ paths:
         name: id
         required: true
         schema:
-          description: The unique identifier for the User having their password reset
           maxLength: 64
           minLength: 1
           pattern: ^[a-zA-Z0-9\-_]+$
@@ -2361,7 +1943,7 @@ paths:
         style: simple
       responses:
         "204":
-          description: Success
+          description: No Content
         "400":
           content:
             application/json:
@@ -2392,7 +1974,6 @@ paths:
         name: id
         required: true
         schema:
-          description: The unique identifier for the User to be unlocked
           maxLength: 64
           minLength: 1
           pattern: ^[a-zA-Z0-9\-_]+$
@@ -2400,7 +1981,7 @@ paths:
         style: simple
       responses:
         "204":
-          description: Success
+          description: No Content
         "400":
           content:
             application/json:
@@ -2464,6 +2045,7 @@ components:
           relation: relation
       properties:
         description:
+          minLength: 1
           type: string
         action:
           $ref: '#/components/schemas/ActionId'
@@ -2608,6 +2190,7 @@ components:
           nullable: true
           type: string
         description:
+          minLength: 1
           type: string
         actions:
           items:
@@ -2665,27 +2248,6 @@ components:
           nullable: true
           type: string
       type: object
-    AgreementResponse:
-      additionalProperties: false
-      description: Agreement DTO
-      example:
-        signedBy: signedBy
-        name: name
-        signedAt: 2000-01-23T04:56:07.000+00:00
-      properties:
-        name:
-          description: Name of the agreement
-          nullable: true
-          type: string
-        signedBy:
-          description: UserID (obfuscated) of the user who signed this agreement
-          nullable: true
-          type: string
-        signedAt:
-          description: Datetime at which the agreement was signed
-          format: date-time
-          type: string
-      type: object
     ApiKey:
       additionalProperties: false
       description: The metadata of an API key
@@ -2725,6 +2287,9 @@ components:
       additionalProperties: false
       example:
         issuerUrl: issuerUrl
+        fallbackIssuerUrls:
+        - fallbackIssuerUrls
+        - fallbackIssuerUrls
         links:
         - method: method
           description: description
@@ -2734,17 +2299,33 @@ components:
           description: description
           href: https://openapi-generator.tech
           relation: relation
+        supportAccessExpiryWithRole:
+        - permittedRole: permittedRole
+          expiry: 2000-01-23T04:56:07.000+00:00
+        - permittedRole: permittedRole
+          expiry: 2000-01-23T04:56:07.000+00:00
         samlIdentityProviderId: samlIdentityProviderId
         support:
           expiry: 2000-01-23T04:56:07.000+00:00
       properties:
         issuerUrl:
+          minLength: 1
           type: string
+        fallbackIssuerUrls:
+          items:
+            type: string
+          nullable: true
+          type: array
         samlIdentityProviderId:
           nullable: true
           type: string
         support:
           $ref: '#/components/schemas/SupportAccessExpiry'
+        supportAccessExpiryWithRole:
+          items:
+            $ref: '#/components/schemas/SupportAccessExpiryWithRole'
+          nullable: true
+          type: array
         links:
           items:
             $ref: '#/components/schemas/Link'
@@ -2839,6 +2420,7 @@ components:
       properties:
         key:
           description: The API Key value
+          minLength: 1
           type: string
         id:
           description: The unique Id of the API key
@@ -2866,86 +2448,6 @@ components:
       - displayName
       - id
       - key
-      type: object
-    CreateDomainRequest:
-      additionalProperties: false
-      example:
-        owner:
-          firstName: firstName
-          lastName: lastName
-          emailAddress: emailAddress
-          roles:
-          - code: code
-            scope: scope
-          - code: code
-            scope: scope
-          login: login
-          type: type
-        billingContact:
-          firstName: firstName
-          lastName: lastName
-          emailAddress: emailAddress
-          roles:
-          - code: code
-            scope: scope
-          - code: code
-            scope: scope
-          login: login
-          type: type
-        domain: domain
-        companyName: companyName
-        signedAgreements:
-        - signedAgreements
-        - signedAgreements
-        description: description
-        technicalContact:
-          firstName: firstName
-          lastName: lastName
-          emailAddress: emailAddress
-          roles:
-          - code: code
-            scope: scope
-          - code: code
-            scope: scope
-          login: login
-          type: type
-      properties:
-        domain:
-          description: The name LUSID domain to create
-          maxLength: 25
-          minLength: 3
-          pattern: ^[a-zA-Z]([a-zA-Z0-9-]*[a-zA-Z0-9])?$
-          type: string
-        description:
-          description: Optional. Free text description of the domain.
-          maxLength: 50
-          minLength: 5
-          nullable: true
-          pattern: ^[\s\S]*$
-          type: string
-        companyName:
-          description: The name of the company to which the domain is registered
-          maxLength: 50
-          minLength: 2
-          pattern: ^[\s\S]*$
-          type: string
-        owner:
-          $ref: '#/components/schemas/CreateUserRequest'
-        technicalContact:
-          $ref: '#/components/schemas/CreateUserRequest'
-        billingContact:
-          $ref: '#/components/schemas/CreateUserRequest'
-        signedAgreements:
-          description: Optional. If Terms and Conditions agreements have been signed
-            during the sign up process
-          items:
-            type: string
-          nullable: true
-          type: array
-      required:
-      - companyName
-      - domain
-      - owner
       type: object
     CreateRoleRequest:
       additionalProperties: false
@@ -2977,6 +2479,7 @@ components:
         firstName: firstName
         lastName: lastName
         emailAddress: emailAddress
+        secondEmailAddress: secondEmailAddress
         roles:
         - code: code
           scope: scope
@@ -3003,6 +2506,12 @@ components:
             \ Login."
           maxLength: 80
           minLength: 5
+          type: string
+        secondEmailAddress:
+          description: The user's second email address. Only allowed for Service users
+          maxLength: 80
+          minLength: 5
+          nullable: true
           type: string
         login:
           description: "The user's login username, in the form of an email address,\
@@ -3048,13 +2557,16 @@ components:
       properties:
         id:
           description: The user's system supplied unique identifier
+          minLength: 1
           type: string
         emailAddress:
           description: The user's email address which may be null depending on the
             authentication method
+          minLength: 1
           type: string
         type:
           description: The type of user (e.g. Personal or Service)
+          minLength: 1
           type: string
         links:
           items:
@@ -3065,69 +2577,6 @@ components:
       - emailAddress
       - id
       - type
-      type: object
-    DomainId:
-      additionalProperties: false
-      example:
-        name: name
-      properties:
-        name:
-          maxLength: 100
-          minLength: 3
-          readOnly: true
-          type: string
-      required:
-      - name
-      type: object
-    DomainResponse:
-      additionalProperties: false
-      example:
-        owner:
-          value: value
-        billingContact:
-          value: value
-        created: 2000-01-23T04:56:07.000+00:00
-        companyName: companyName
-        description: description
-        links:
-        - method: method
-          description: description
-          href: https://openapi-generator.tech
-          relation: relation
-        - method: method
-          description: description
-          href: https://openapi-generator.tech
-          relation: relation
-        id:
-          name: name
-        technicalContact:
-          value: value
-      properties:
-        id:
-          $ref: '#/components/schemas/DomainId'
-        description:
-          description: A description of the domain
-          nullable: true
-          type: string
-        companyName:
-          description: The company name for the domain
-          nullable: true
-          type: string
-        owner:
-          $ref: '#/components/schemas/UserId'
-        billingContact:
-          $ref: '#/components/schemas/UserId'
-        technicalContact:
-          $ref: '#/components/schemas/UserId'
-        created:
-          description: The
-          format: date-time
-          type: string
-        links:
-          items:
-            $ref: '#/components/schemas/Link'
-          nullable: true
-          type: array
       type: object
     ErrorDetail:
       additionalProperties: false
@@ -3172,10 +2621,13 @@ components:
           format: int32
           type: integer
         name:
+          minLength: 1
           type: string
         displayName:
+          minLength: 1
           type: string
         description:
+          minLength: 1
           type: string
         required:
           type: boolean
@@ -3214,7 +2666,7 @@ components:
         actions:
           items:
             $ref: '#/components/schemas/ActionId'
-          minLength: 1
+          minItems: 1
           type: array
         name:
           maxLength: 100
@@ -3261,6 +2713,7 @@ components:
           key:
             firstName: firstName
             lastName: lastName
+            secondEmail: secondEmail
             links:
             - method: method
               description: description
@@ -3317,6 +2770,7 @@ components:
       additionalProperties: false
       properties:
         name:
+          minLength: 1
           type: string
         errorDetails:
           items:
@@ -3344,13 +2798,6 @@ components:
         instance:
           nullable: true
           type: string
-        extensions:
-          additionalProperties:
-            additionalProperties: false
-            type: object
-          nullable: true
-          readOnly: true
-          type: object
       required:
       - code
       - name
@@ -3359,6 +2806,7 @@ components:
       additionalProperties: false
       properties:
         name:
+          minLength: 1
           type: string
         errorDetails:
           items:
@@ -3393,13 +2841,6 @@ components:
         instance:
           nullable: true
           type: string
-        extensions:
-          additionalProperties:
-            additionalProperties: false
-            type: object
-          nullable: true
-          readOnly: true
-          type: object
       required:
       - code
       - name
@@ -3415,8 +2856,10 @@ components:
         issuer: issuer
       properties:
         id:
+          minLength: 1
           type: string
         type:
+          minLength: 1
           type: string
         displayName:
           maxLength: 512
@@ -3427,8 +2870,10 @@ components:
           nullable: true
           type: string
         clientId:
+          minLength: 1
           type: string
         issuer:
+          minLength: 1
           type: string
       required:
       - clientId
@@ -3717,7 +3162,6 @@ components:
         scope:
           maxLength: 100
           minLength: 3
-          nullable: true
           type: string
         code:
           maxLength: 100
@@ -3725,6 +3169,7 @@ components:
           type: string
       required:
       - code
+      - scope
       type: object
     RoleResponse:
       additionalProperties: false
@@ -3739,14 +3184,17 @@ components:
       properties:
         id:
           description: The role's system supplied unique identifier
+          minLength: 1
           type: string
         roleId:
           $ref: '#/components/schemas/RoleId'
         source:
           description: The source of the role
+          minLength: 1
           type: string
         name:
           description: The role name, which must be unique within the system.
+          minLength: 1
           type: string
         description:
           description: The description for this role
@@ -3812,11 +3260,34 @@ components:
       required:
       - expiry
       type: object
+    SupportAccessExpiryWithRole:
+      additionalProperties: false
+      description: Time at which the support access granted for a role expires
+      example:
+        permittedRole: permittedRole
+        expiry: 2000-01-23T04:56:07.000+00:00
+      properties:
+        expiry:
+          description: DateTimeOffset at which the access will be revoked
+          format: date-time
+          type: string
+        permittedRole:
+          description: "Unique identifier for permitted role. \r\nUse GET /identity/api/authentication/support-roles\
+            \ to lookup role label/code from identifier."
+          minLength: 1
+          type: string
+      required:
+      - expiry
+      - permittedRole
+      type: object
     SupportAccessRequest:
       additionalProperties: false
       description: A Request to grant support access to your account
       example:
         duration: duration
+        permittedRoles:
+        - permittedRoles
+        - permittedRoles
         description: description
       properties:
         duration:
@@ -3834,6 +3305,11 @@ components:
           nullable: true
           pattern: ^[\s\S]*$
           type: string
+        permittedRoles:
+          items:
+            type: string
+          nullable: true
+          type: array
       required:
       - duration
       type: object
@@ -3844,6 +3320,9 @@ components:
         duration: duration
         createdAt: 2000-01-23T04:56:07.000+00:00
         terminatedAt: 2000-01-23T04:56:07.000+00:00
+        permittedRoles:
+        - permittedRoles
+        - permittedRoles
         createdBy: createdBy
         terminatedBy: terminatedBy
         description: description
@@ -3853,6 +3332,7 @@ components:
       properties:
         id:
           description: ID of the support access request
+          minLength: 1
           type: string
         duration:
           description: The duration for which access is requested (in any ISO-8601
@@ -3878,6 +3358,7 @@ components:
           type: string
         createdBy:
           description: Obfuscated UserId of the user who granted the support access
+          minLength: 1
           type: string
         terminated:
           description: Whether or not that access has been invalidated
@@ -3891,12 +3372,64 @@ components:
           description: Obfuscated UserId of the user who revoked the access
           nullable: true
           type: string
+        permittedRoles:
+          description: A list of permitted roles, valid for support staff to assume,
+            for the duration of the access request
+          items:
+            type: string
+          nullable: true
+          type: array
       required:
       - createdAt
       - createdBy
       - duration
       - expiry
       - id
+      type: object
+    SupportRole:
+      additionalProperties: false
+      example:
+        internalIdentifier: internalIdentifier
+        roleIdentifier:
+          key: roleIdentifier
+        description: description
+        label: label
+      properties:
+        label:
+          nullable: true
+          type: string
+        description:
+          nullable: true
+          type: string
+        roleIdentifier:
+          additionalProperties:
+            type: string
+          nullable: true
+          type: object
+        internalIdentifier:
+          nullable: true
+          type: string
+      type: object
+    SupportRolesResponse:
+      additionalProperties: false
+      example:
+        supportRoles:
+        - internalIdentifier: internalIdentifier
+          roleIdentifier:
+            key: roleIdentifier
+          description: description
+          label: label
+        - internalIdentifier: internalIdentifier
+          roleIdentifier:
+            key: roleIdentifier
+          description: description
+          label: label
+      properties:
+        supportRoles:
+          items:
+            $ref: '#/components/schemas/SupportRole'
+          nullable: true
+          type: array
       type: object
     TemporaryPassword:
       additionalProperties: false
@@ -3905,6 +3438,7 @@ components:
       properties:
         password:
           description: The user's temporary password
+          minLength: 1
           type: string
       required:
       - password
@@ -3928,6 +3462,7 @@ components:
         firstName: firstName
         lastName: lastName
         emailAddress: emailAddress
+        secondEmailAddress: secondEmailAddress
         roles:
         - code: code
           scope: scope
@@ -3949,6 +3484,11 @@ components:
           maxLength: 80
           minLength: 5
           type: string
+        secondEmailAddress:
+          maxLength: 80
+          minLength: 5
+          nullable: true
+          type: string
         login:
           description: "The user's login username, in the form of an email address,\
             \ which must be unique within the system.\r\nFor user accounts this should\
@@ -3968,19 +3508,6 @@ components:
       - lastName
       - login
       type: object
-    UserId:
-      additionalProperties: false
-      example:
-        value: value
-      properties:
-        value:
-          maxLength: 100
-          minLength: 3
-          readOnly: true
-          type: string
-      required:
-      - value
-      type: object
     UserResponse:
       additionalProperties: false
       example:
@@ -3988,6 +3515,7 @@ components:
         lastName: lastName
         emailAddress: emailAddress
         external: true
+        secondEmailAddress: secondEmailAddress
         roles:
         - roleId:
             code: code
@@ -4019,18 +3547,27 @@ components:
       properties:
         id:
           description: The user's system supplied unique identifier
+          minLength: 1
           type: string
         emailAddress:
           description: The user's emailAddress address, which must be unique within
             the system
+          minLength: 1
+          type: string
+        secondEmailAddress:
+          description: The user's second email address. Only allowed for service users.
+          nullable: true
           type: string
         login:
+          minLength: 1
           type: string
         firstName:
           description: The user's first name
+          minLength: 1
           type: string
         lastName:
           description: The user's last name
+          minLength: 1
           type: string
         roles:
           description: The roles that the user has.
@@ -4040,9 +3577,11 @@ components:
           type: array
         type:
           description: The type of user (e.g. Personal or Service)
+          minLength: 1
           type: string
         status:
           description: The status of the user
+          minLength: 1
           type: string
         external:
           description: Whether or not the user originates from an external identity
@@ -4069,6 +3608,7 @@ components:
       example:
         firstName: firstName
         lastName: lastName
+        secondEmail: secondEmail
         links:
         - method: method
           description: description
@@ -4093,6 +3633,9 @@ components:
           type: string
         email:
           description: The email address registered for that user
+          nullable: true
+          type: string
+        secondEmail:
           nullable: true
           type: string
         firstName:
@@ -4127,7 +3670,6 @@ x-tagGroups:
   - Application Metadata
   - Applications
   - Authentication
-  - Domains
   - Identity Provider
   - Me
   - Personal Authentication Tokens

@@ -26,17 +26,21 @@ import java.io.IOException;
 import java.time.OffsetDateTime;
 
 /**
- * Time at which the support access expires
+ * Time at which the support access granted for a role expires
  */
-@ApiModel(description = "Time at which the support access expires")
+@ApiModel(description = "Time at which the support access granted for a role expires")
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class SupportAccessExpiry {
+public class SupportAccessExpiryWithRole {
   public static final String SERIALIZED_NAME_EXPIRY = "expiry";
   @SerializedName(SERIALIZED_NAME_EXPIRY)
   private OffsetDateTime expiry;
 
+  public static final String SERIALIZED_NAME_PERMITTED_ROLE = "permittedRole";
+  @SerializedName(SERIALIZED_NAME_PERMITTED_ROLE)
+  private String permittedRole;
 
-  public SupportAccessExpiry expiry(OffsetDateTime expiry) {
+
+  public SupportAccessExpiryWithRole expiry(OffsetDateTime expiry) {
     this.expiry = expiry; 
     return this;
   }
@@ -52,6 +56,25 @@ public class SupportAccessExpiry {
 
   public void setExpiry(OffsetDateTime expiry) {
     this.expiry = expiry;
+  }
+
+
+  public SupportAccessExpiryWithRole permittedRole(String permittedRole) {
+    this.permittedRole = permittedRole; 
+    return this;
+  }
+
+   /**
+   * Unique identifier for permitted role.   Use GET /identity/api/authentication/support-roles to lookup role label/code from identifier.
+   * @return permittedRole
+  **/
+  @ApiModelProperty(required = true, value = "Unique identifier for permitted role.   Use GET /identity/api/authentication/support-roles to lookup role label/code from identifier.")
+  public String getPermittedRole() {
+    return permittedRole;
+  }
+
+  public void setPermittedRole(String permittedRole) {
+    this.permittedRole = permittedRole;
   }
 
 
@@ -74,8 +97,9 @@ public class SupportAccessExpiry {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class SupportAccessExpiry {\n");
+    sb.append("class SupportAccessExpiryWithRole {\n");
     sb.append("    expiry: ").append(toIndentedString(expiry)).append("\n");
+    sb.append("    permittedRole: ").append(toIndentedString(permittedRole)).append("\n");
     sb.append("}");
     return sb.toString();
   }

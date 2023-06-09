@@ -17,6 +17,7 @@ Name | Type | Description | Notes
 **terminated** | **Boolean** | Whether or not that access has been invalidated |  [optional]
 **terminatedAt** | **OffsetDateTime** | DateTimeOffset at which the access was invalidated |  [optional]
 **terminatedBy** | **String** | Obfuscated UserId of the user who revoked the access |  [optional]
+**permittedRoles** | **List&lt;String&gt;** | A list of permitted roles, valid for support staff to assume, for the duration of the access request |  [optional]
 
 
 

@@ -67,6 +67,6 @@ null (empty response body)
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**204** | Success |  -  |
+**204** | No Content |  -  |
 **0** | Error response |  -  |
 

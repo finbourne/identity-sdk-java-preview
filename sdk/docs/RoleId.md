@@ -7,7 +7,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**scope** | **String** |  |  [optional]
+**scope** | **String** |  | 
 **code** | **String** |  | 
 
 
